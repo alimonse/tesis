@@ -1,5 +1,6 @@
-import { Column, Entity } from 'typeorm';
+import {Column, Entity, ManyToOne} from 'typeorm';
 import { EntidadPrincipal } from '../../clases-principales/entidad-principal';
+import {EmpresaEntity} from "../empresa/empresa.entity";
 
 @Entity('sucursal')
 export class SucursalEntity extends EntidadPrincipal {
@@ -38,4 +39,9 @@ export class SucursalEntity extends EntidadPrincipal {
     type: 'tinyint',
   })
   habilitado: 1 | 0;
+
+  @ManyToOne(
+    () => EmpresaEntity, (empresa)=> empresa.sucursales
+  )
+  empresa: EmpresaEntity |  number;
 }

@@ -20,4 +20,19 @@ export class PrestacionesEntity extends EntidadPrincipal {
     type: 'tinyint',
   })
   habilitado: number;
+
+  @Column({
+    name: 'tiempo_aproximado',
+    type: 'datetime',
+    nullable: true,
+  })
+  tiempoAproximado: string;
+
+  @Column({
+    name: 'tiempo_espera',
+    type: 'datetime',
+    nullable: true,
+  })
+  tiempoEspera: string;
+
 }

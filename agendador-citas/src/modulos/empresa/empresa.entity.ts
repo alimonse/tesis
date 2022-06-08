@@ -1,5 +1,6 @@
-import { Column, Entity } from 'typeorm';
+import {Column, Entity, OneToMany} from 'typeorm';
 import { EntidadPrincipal } from '../../clases-principales/entidad-principal';
+import {SucursalEntity} from "../sucursal/sucursal.entity";
 
 @Entity('empresa')
 export class EmpresaEntity extends EntidadPrincipal {
@@ -20,4 +21,8 @@ export class EmpresaEntity extends EntidadPrincipal {
     type: 'tinyint',
   })
   habilitado: 0 | 1;
+
+  @OneToMany(() => SucursalEntity, (sucursales) => sucursales.empresa)
+  sucursales: SucursalEntity[];
+
 }

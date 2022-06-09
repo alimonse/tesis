@@ -1,5 +1,8 @@
-import { Column, Entity } from 'typeorm';
+import {Column, Entity, ManyToOne, OneToMany} from 'typeorm';
 import { EntidadPrincipal } from '../../clases-principales/entidad-principal';
+import {OficinaEntity} from "../oficina/oficina.entity";
+import {ColaboradorEntity} from "../colaborador/colaborador.entity";
+import {CitaEntity} from "../cita/cita.entity";
 
 @Entity('prestaciones')
 export class PrestacionesEntity extends EntidadPrincipal {
@@ -34,5 +37,14 @@ export class PrestacionesEntity extends EntidadPrincipal {
     nullable: true,
   })
   tiempoEspera: string;
+
+  @ManyToOne(()=> OficinaEntity, (oficina) => oficina.prestaciones)
+  oficina: OficinaEntity | number;
+
+  @ManyToOne(() => ColaboradorEntity, (colaborador) => colaborador.prestaciones)
+  colaborador: ColaboradorEntity | number
+
+  @OneToMany(() => CitaEntity, (citas) => citas.prestaciones)
+  citas: CitaEntity[];
 
 }

@@ -39,6 +39,4 @@ export class CitaEntity extends EntidadPrincipal {
 
   @ManyToOne(() => UsuarioEntity, (usuario) => usuario.citas)
   usuario: UsuarioEntity | number
-
-
 }

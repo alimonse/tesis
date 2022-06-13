@@ -31,8 +31,6 @@ import {UsuarioModule} from "./modulos/usuario/usuario.module";
       OficinaModule,
       PrestacionesModule,
       SucursalModule,
-
-
   ],
   controllers: [AppController],
   providers: [AppService],

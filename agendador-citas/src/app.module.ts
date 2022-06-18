@@ -13,6 +13,7 @@ import {OficinaModule} from "./modulos/oficina/oficina.module";
 import {PrestacionesModule} from "./modulos/prestaciones/prestaciones.module";
 import {SucursalModule} from "./modulos/sucursal/sucursal.module";
 import {UsuarioModule} from "./modulos/usuario/usuario.module";
+import {AgenteModule} from "./modulos/agente/agente.module";
 
 @Module({
   imports: [
@@ -31,6 +32,8 @@ import {UsuarioModule} from "./modulos/usuario/usuario.module";
       OficinaModule,
       PrestacionesModule,
       SucursalModule,
+
+      AgenteModule
   ],
   controllers: [AppController],
   providers: [AppService],

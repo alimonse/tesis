@@ -15,7 +15,7 @@ import { SucursalModule } from './modulos/sucursal/sucursal.module';
 import { UsuarioModule } from './modulos/usuario/usuario.module';
 import { AgenteModule } from './modulos/agente/agente.module';
 import { CalendarService } from './calendar.service';
-import {HttpModule} from "@nestjs/axios";
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -41,5 +41,6 @@ import {HttpModule} from "@nestjs/axios";
   ],
   controllers: [AppController],
   providers: [AppService],
+  exports:[]
 })
 export class AppModule {}

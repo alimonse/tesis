@@ -59,7 +59,6 @@ interface GoogleCalendarEvent {
 
 @Injectable()
 export class CalendarService {
-
   calendar: ReturnType<typeof google.calendar>;
   POLLING_INTERVAL = 5 * 1000; // in milliseconds
 
@@ -117,6 +116,28 @@ export class CalendarService {
     // );
   }
 
+  async listarEventos() {
+    try {
+      const listaEventos = await this.calendar.events.list({
+        calendarId: calendarId,
+        singleEvents: true,
+        orderBy: 'startTime',
+      });
+
+      const eventosLimpios = listaEventos.data.items.map((eventos) => {
+        return {
+          nombreEvento: eventos.summary,
+          start: eventos.start.date,
+          end: eventos.end.date,
+        };
+      });
+
+      console.log(eventosLimpios, 'eventos limpios');
+    } catch (e) {
+      console.log(e, 'error');
+    }
+  }
+
   async pollCalendarEvents() {
     console.debug('[calendar] polling messages...');
 
@@ -132,7 +153,6 @@ export class CalendarService {
         // timeMin: timeMin.toISOString(),
         // timeMax: timeNow.toISOString(),
       });
-
 
       const events = response.data.items as GoogleCalendarEvent[];
 
@@ -194,8 +214,4 @@ export class CalendarService {
 
     await this.httpService.post(endpoint, data, config).toPromise();
   }
-
-
-
 }
-

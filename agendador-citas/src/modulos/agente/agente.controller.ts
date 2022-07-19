@@ -1,5 +1,5 @@
-import {Controller, Post, Req, Res} from '@nestjs/common';
-import {AgenteService} from "./agente.service";
+import { Controller, Post, Req, Res } from '@nestjs/common';
+import { AgenteService } from './agente.service';
 
 @Controller('agente')
 export class AgenteController {
@@ -11,10 +11,4 @@ export class AgenteController {
     // console.log(response);
     this._agente.general(request, response);
   }
-
-
 }
-
-
-
-

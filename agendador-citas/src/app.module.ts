@@ -40,6 +40,6 @@ import {HttpModule} from "@nestjs/axios";
     AgenteModule,
   ],
   controllers: [AppController],
-  providers: [AppService, CalendarService],
+  providers: [AppService],
 })
 export class AppModule {}

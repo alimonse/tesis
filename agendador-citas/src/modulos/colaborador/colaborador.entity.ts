@@ -1,7 +1,7 @@
-import {Column, Entity, OneToMany} from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { EntidadPrincipal } from '../../clases-principales/entidad-principal';
-import {PrestacionesEntity} from "../prestaciones/prestaciones.entity";
-import {HorarioDiaEntity} from "../horario-dia/horario-dia.entity";
+import { PrestacionesEntity } from '../prestaciones/prestaciones.entity';
+import { HorarioDiaEntity } from '../horario-dia/horario-dia.entity';
 
 @Entity('colaborador')
 export class ColaboradorEntity extends EntidadPrincipal {
@@ -23,7 +23,10 @@ export class ColaboradorEntity extends EntidadPrincipal {
   })
   habilitado: number;
 
-  @OneToMany(() => PrestacionesEntity, (prestaciones) => prestaciones.colaborador)
+  @OneToMany(
+    () => PrestacionesEntity,
+    (prestaciones) => prestaciones.colaborador,
+  )
   prestaciones: PrestacionesEntity[];
 
   @OneToMany(() => HorarioDiaEntity, (horariosDia) => horariosDia.colaborador)

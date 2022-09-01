@@ -1,10 +1,11 @@
 import {
+  BaseEntity,
   CreateDateColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-export class EntidadPrincipal {
+export class EntidadPrincipal extends BaseEntity {
   @PrimaryGeneratedColumn({
     name: 'ID',
   })
@@ -24,3 +25,15 @@ export class EntidadPrincipal {
   })
   fechaActualizacion: Date = new Date();
 }
+
+// export abstract class DateAuditEntity extends BaseEntity {
+//   @CreateDateColumn({
+//     // default: () => 'CURRENT_TIMESTAMP',
+//   })
+//   createAt: Date;
+//
+//   @UpdateDateColumn({
+//     // default: () => 'CURRENT_TIMESTAMP',
+//   })
+//   upateAt: Date;
+// }

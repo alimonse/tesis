@@ -1,21 +1,21 @@
-import {EntidadPrincipal} from "../../clases-principales/entidad-principal";
-import {Column, Entity, ManyToOne, OneToMany} from "typeorm";
-import {ColaboradorEntity} from "../colaborador/colaborador.entity";
-import {HorarioHoraEntity} from "../horario-hora/horario-hora.entity";
+import { EntidadPrincipal } from '../../clases-principales/entidad-principal';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { ColaboradorEntity } from '../colaborador/colaborador.entity';
+import { HorarioHoraEntity } from '../horario-hora/horario-hora.entity';
 
 @Entity('horario-dia')
 export class HorarioDiaEntity extends EntidadPrincipal {
   @Column({
     name: 'dia',
     type: 'varchar',
-    nullable: true
+    nullable: true,
   })
   dia: string;
 
   @Column({
     name: 'habilitado',
-    type: "tinyint",
-    nullable: true
+    type: 'tinyint',
+    nullable: true,
   })
   habilitado: 1 | 0;
 
@@ -24,5 +24,4 @@ export class HorarioDiaEntity extends EntidadPrincipal {
 
   @OneToMany(() => HorarioHoraEntity, (horariosHora) => horariosHora.horarioDia)
   horariosHora: HorarioHoraEntity[];
-
 }

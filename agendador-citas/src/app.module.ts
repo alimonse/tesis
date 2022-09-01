@@ -3,19 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import config from './environment/config';
-import { DatabaseModule } from './database/database.module';
-import { CitaModule } from './modulos/cita/cita.module';
-import { ColaboradorModule } from './modulos/colaborador/colaborador.module';
-import { EmpresaModule } from './modulos/empresa/empresa.module';
-import { HorarioDiaModule } from './modulos/horario-dia/horario-dia.module';
-import { HorarioHoraModule } from './modulos/horario-hora/horario-hora.module';
-import { OficinaModule } from './modulos/oficina/oficina.module';
-import { PrestacionesModule } from './modulos/prestaciones/prestaciones.module';
-import { SucursalModule } from './modulos/sucursal/sucursal.module';
-import { UsuarioModule } from './modulos/usuario/usuario.module';
-import { AgenteModule } from './modulos/agente/agente.module';
-import { CalendarService } from './calendar.service';
-import { HttpModule } from '@nestjs/axios';
+import { MODULOS_AGENDADOR_CITAS } from './common/constantes/modulos-agendador-citas';
 
 @Module({
   imports: [
@@ -23,24 +11,9 @@ import { HttpModule } from '@nestjs/axios';
       load: [config],
       isGlobal: true,
     }),
-    DatabaseModule,
-
-    HttpModule,
-
-    CitaModule,
-    UsuarioModule,
-    ColaboradorModule,
-    EmpresaModule,
-    HorarioDiaModule,
-    HorarioHoraModule,
-    OficinaModule,
-    PrestacionesModule,
-    SucursalModule,
-
-    AgenteModule,
+    ...MODULOS_AGENDADOR_CITAS,
   ],
   controllers: [AppController],
   providers: [AppService],
-  exports:[]
 })
 export class AppModule {}

@@ -1,7 +1,7 @@
-import {Column, Entity, ManyToOne, OneToMany} from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { EntidadPrincipal } from '../../clases-principales/entidad-principal';
-import {EmpresaEntity} from "../empresa/empresa.entity";
-import {OficinaEntity} from "../oficina/oficina.entity";
+import { EmpresaEntity } from '../empresa/empresa.entity';
+import { OficinaEntity } from '../oficina/oficina.entity';
 
 @Entity('sucursal')
 export class SucursalEntity extends EntidadPrincipal {
@@ -41,13 +41,9 @@ export class SucursalEntity extends EntidadPrincipal {
   })
   habilitado: 1 | 0;
 
-  @ManyToOne(
-    () => EmpresaEntity, (empresa)=> empresa.sucursales
-  )
-  empresa: EmpresaEntity |  number;
+  @ManyToOne(() => EmpresaEntity, (empresa) => empresa.sucursales)
+  empresa: EmpresaEntity | number;
 
   @OneToMany(() => OficinaEntity, (oficinas) => oficinas.sucursal)
-  oficinas: OficinaEntity[]
-
-
+  oficinas: OficinaEntity[];
 }

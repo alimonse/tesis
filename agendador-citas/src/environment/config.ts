@@ -1,8 +1,6 @@
 import { registerAs } from '@nestjs/config';
 
 export default registerAs('config', () => {
-  console.log('aqhi');
-
   return {
     port: process.env.PORT,
     database: {

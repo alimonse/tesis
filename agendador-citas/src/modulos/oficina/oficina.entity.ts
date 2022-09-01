@@ -1,7 +1,7 @@
-import {Column, Entity, ManyToOne, OneToMany} from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { EntidadPrincipal } from '../../clases-principales/entidad-principal';
-import {SucursalEntity} from "../sucursal/sucursal.entity";
-import {PrestacionesEntity} from "../prestaciones/prestaciones.entity";
+import { SucursalEntity } from '../sucursal/sucursal.entity';
+import { PrestacionesEntity } from '../prestaciones/prestaciones.entity';
 
 @Entity('oficina')
 export class OficinaEntity extends EntidadPrincipal {

@@ -14,6 +14,7 @@ export class OficinaEntity extends EntidadPrincipal {
   @Column({
     name: 'habilitado',
     type: 'tinyint',
+    default: 1,
   })
   habilitado: number;
 

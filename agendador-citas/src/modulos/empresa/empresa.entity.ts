@@ -11,6 +11,30 @@ export class EmpresaEntity extends EntidadPrincipal {
   nombreComercial: string;
 
   @Column({
+    name: 'mensaje_saludo',
+    type: 'varchar',
+  })
+  mensajeSaludo: string;
+
+  @Column({
+    name: 'informacion',
+    type: 'varchar',
+  })
+  informacion: string;
+
+  @Column({
+    name: 'lat',
+    type: 'decimal',
+  })
+  lat: string;
+
+  @Column({
+    name: 'lng',
+    type: 'decimal',
+  })
+  lng: number;
+
+  @Column({
     name: 'ruc',
     type: 'varchar',
   })
@@ -19,6 +43,7 @@ export class EmpresaEntity extends EntidadPrincipal {
   @Column({
     name: 'habilitado',
     type: 'tinyint',
+    default: 1,
   })
   habilitado: 0 | 1;
 

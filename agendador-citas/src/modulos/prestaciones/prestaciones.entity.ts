@@ -19,12 +19,6 @@ export class PrestacionesEntity extends EntidadPrincipal {
   descripcion: string;
 
   @Column({
-    name: 'habilitado',
-    type: 'tinyint',
-  })
-  habilitado: number;
-
-  @Column({
     name: 'tiempo_aproximado',
     type: 'datetime',
     nullable: true,
@@ -37,6 +31,13 @@ export class PrestacionesEntity extends EntidadPrincipal {
     nullable: true,
   })
   tiempoEspera: string;
+
+  @Column({
+    name: 'habilitado',
+    type: 'tinyint',
+    default: 1,
+  })
+  habilitado: number;
 
   @ManyToOne(() => OficinaEntity, (oficina) => oficina.prestaciones)
   oficina: OficinaEntity | number;

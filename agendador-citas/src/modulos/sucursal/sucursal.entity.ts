@@ -38,6 +38,7 @@ export class SucursalEntity extends EntidadPrincipal {
   @Column({
     name: 'habilitado',
     type: 'tinyint',
+    default: 1,
   })
   habilitado: 1 | 0;
 

@@ -20,6 +20,7 @@ export class ColaboradorEntity extends EntidadPrincipal {
   @Column({
     name: 'habilitado',
     type: 'tinyint',
+    default: 1,
   })
   habilitado: number;
 

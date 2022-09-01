@@ -13,6 +13,26 @@ export class EmpresaCrearDto {
   ruc: string;
 
   @IsOptional()
+  @IsString()
+  @Expose()
+  mensajeSaludo: string;
+
+  @IsOptional()
+  @IsString()
+  @Expose()
+  informacion: string;
+
+  @IsOptional()
+  @IsNumber()
+  @Expose()
+  lat: string;
+
+  @IsOptional()
+  @IsNumber()
+  @Expose()
+  lng: string;
+
+  @IsOptional()
   @IsNumber()
   @Expose()
   habilitado: 0 | 1;

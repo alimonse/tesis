@@ -36,8 +36,6 @@ export class CitaEntity extends EntidadPrincipal {
   @ManyToOne(() => PrestacionesEntity, (prestaciones) => prestaciones.citas)
   prestaciones: PrestacionesEntity | number;
 
-  @ManyToOne((type) => UsuarioEntity, (usuario) => usuario.citas, {
-    nullable: false,
-  })
+  @ManyToOne(() => UsuarioEntity, (usuario) => usuario.citas)
   usuario: UsuarioEntity | number;
 }

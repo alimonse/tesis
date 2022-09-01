@@ -10,6 +10,26 @@ export class EmpresaActualizarDto {
   @IsOptional()
   @IsString()
   @Expose()
+  mensajeSaludo: string;
+
+  @IsOptional()
+  @IsString()
+  @Expose()
+  informacion: string;
+
+  @IsOptional()
+  @IsNumber()
+  @Expose()
+  lat: string;
+
+  @IsOptional()
+  @IsNumber()
+  @Expose()
+  lng: string;
+
+  @IsOptional()
+  @IsString()
+  @Expose()
   ruc: string;
 
   @IsOptional()

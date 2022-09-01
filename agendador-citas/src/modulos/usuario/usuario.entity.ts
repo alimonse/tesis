@@ -19,14 +19,13 @@ export class UsuarioEntity extends EntidadPrincipal {
   telefono: string;
 
   @Column({
-    name: 'tinyint',
-    type: 'varchar',
+    name: 'habilitado',
+    type: 'tinyint',
+    default: 1,
     nullable: true,
   })
   habilitado: 1 | 0;
 
-  @OneToMany((type) => CitaEntity, (citas) => citas.usuario, {
-    nullable: false,
-  })
+  @OneToMany(() => CitaEntity, (citas) => citas.usuario)
   citas: CitaEntity[];
 }

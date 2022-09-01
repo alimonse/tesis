@@ -11,17 +11,16 @@ import {
   Query,
 } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
-import {validate} from "class-validator";
+import { validate } from 'class-validator';
 import { ServicioPrincipal } from './servicio-principal';
-
 
 @Controller()
 export class ControladorPrincipal<Entidad> {
-
   constructor(
     private _servicio: ServicioPrincipal<Entidad>,
     private CrearDto,
-    private ActualizarDto) {}
+    private ActualizarDto,
+  ) {}
 
   @Post()
   async create(@Body() dato): Promise<Entidad> {
@@ -76,7 +75,7 @@ export class ControladorPrincipal<Entidad> {
     }
   }
 
-  @Get('id')
+  @Get(':id')
   async findById(@Param('id') id: number): Promise<Entidad> {
     try {
       return await this._servicio.findById(Number(id));

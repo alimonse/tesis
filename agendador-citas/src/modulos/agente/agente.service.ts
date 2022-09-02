@@ -11,8 +11,8 @@ export class AgenteService {
     private readonly prestacionesService: PrestacionesService,
     private readonly calendarService: CalendarService,
   ) {
-    this.consultarDataEmpresa();
-    this.consultarServicios();
+    // this.consultarDataEmpresa();
+    // this.consultarServicios();
     this.saberEventosCalendario();
   }
   empresa;
@@ -43,7 +43,7 @@ export class AgenteService {
   }
 
   saberEventosCalendario() {
-    this.calendarService.listarEventos();
+    this.calendarService.listEvents();
   }
 
   welcome = (agent) => {

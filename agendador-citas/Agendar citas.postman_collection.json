@@ -156,7 +156,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n \"nombreComercial\": \"manticore\",\n \"ruc\": \"12312312\",\n \"lat\": 13,\n \"lng\": 1,\n \"informacion\": \"informacion\",\n \"mensajeSaludo\": \"saludo\"\n}",
+							"raw": "{\n \"nombreComercial\": \"manticore-labs\",\n \"ruc\": \"12312312\",\n \"lat\": 13,\n \"lng\": 1,\n \"informacion\": \"informacion\",\n \"mensajeSaludo\": \"saludo\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -200,107 +200,6 @@
 							"port": "3050",
 							"path": [
 								"empresa",
-								"1"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "cita",
-			"item": [
-				{
-					"name": "get",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3050/cita",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3050",
-							"path": [
-								"cita"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get by id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3050/cita/1",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3050",
-							"path": [
-								"cita",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "create",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n \"dia\": \"20-12-2022\",\n \"hora_inicio\": \"12\",\n \"hora_fin\": \"13\"   ,\n \"habilitado\": 1,\n \"usuario\": 1\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3050/cita",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3050",
-							"path": [
-								"cita"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "update",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n \"hora_fin\": \"13\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3050/cita/1",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3050",
-							"path": [
-								"cita",
 								"1"
 							]
 						}
@@ -613,107 +512,6 @@
 			]
 		},
 		{
-			"name": "horario-hora",
-			"item": [
-				{
-					"name": "get",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3050/horario-hora",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3050",
-							"path": [
-								"horario-hora"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get by id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3050/horario-hora/1",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3050",
-							"path": [
-								"horario-hora",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "create",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n \"desde\": \"20-12-2022\",\n \"hasta\": \"20-12-2022\",\n \"horarioDia\": 1\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3050/horario-hora",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3050",
-							"path": [
-								"horario-hora"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "update",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n \"desde\": \"20-12-2022\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3050/horario-hora/1",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3050",
-							"path": [
-								"horario-hora",
-								"1"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "horario-dia",
 			"item": [
 				{
@@ -762,7 +560,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n \"dia\": \"20-12-2022\",\n \"colaborador\": 1\n}",
+							"raw": "{\n \"dia\": \"2022-09-02\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -806,6 +604,119 @@
 							"port": "3050",
 							"path": [
 								"horario-dia",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "horario-hora",
+			"item": [
+				{
+					"name": "get",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"descripcion\": \"Dev\",\n    \"desde\": null,\n    \"dia\": \"20-12-2022\",\n    \"fechaActualizacion\": \"2022-09-02T07:20:14.384Z\",\n    \"fechaCreacion\": \"2022-09-02T07:20:14.384Z\",\n    \"habilitado\": 1,\n    \"hasta\": null,\n    \"id\": 1,\n    \"idDia\": 1,\n    \"idPrestacion\": 2,\n    \"nombreServicio\": \"desarrollo de software\",\n    \"tiempoAproximado\": \"2022-09-01T06:00:00.000Z\",\n    \"tiempoEspera\": \"2022-09-01T05:15:00.000Z\".\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3050/horario-hora",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3050",
+							"path": [
+								"horario-hora"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3050/horario-hora/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3050",
+							"path": [
+								"horario-hora",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \"desde\": \"2022-09-02T09:17:50.914Z\",\n \"hasta\": \"2022-09-02T09:17:50.914Z\",\n \"horarioDia\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3050/horario-hora",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3050",
+							"path": [
+								"horario-hora"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \"desde\": \"20-12-2022\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3050/horario-hora/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3050",
+							"path": [
+								"horario-hora",
 								"1"
 							]
 						}
@@ -863,7 +774,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nombreServicio\": \"nombreServicio\",\n    \"descripcion\": \"descripcion\",\n    \"tiempoAproximado\": \"20-12-2022\",\n    \"tiempoEspera\": \"20-12-2022\",\n    \"oficina\": 1,\n    \"colaborador\": 1\n}",
+							"raw": "{\n    \"nombreServicio\": \"nombreServicio\",\n    \"descripcion\": \"descripcion\",\n    \"tiempoAproximado\": \"2022-09-02T09:17:50.914Z\",\n    \"tiempoEspera\": \"2022-09-02T09:17:50.914Z\",\n    \"oficina\": 1,\n    \"colaborador\": 1,\n    \"horarioDia\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -907,6 +818,107 @@
 							"port": "3050",
 							"path": [
 								"prestaciones",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "cita",
+			"item": [
+				{
+					"name": "get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3050/cita",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3050",
+							"path": [
+								"cita"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3050/cita/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3050",
+							"path": [
+								"cita",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"dia\": \"2022-09-02\",\n    \"horaFin\": \"2022-09-02T09:17:50.914Z\",\n    \"horaInicio\": \"2022-09-02T09:17:50.914Z\",\n    \"habilitado\": 1,\n    \"usuario\": 1,\n    \"prestaciones\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3050/cita",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3050",
+							"path": [
+								"cita"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \"hora_fin\": \"13\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3050/cita/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3050",
+							"path": [
+								"cita",
 								"1"
 							]
 						}

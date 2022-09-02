@@ -23,5 +23,5 @@ export const MODULOS_AGENDADOR_CITAS = [
   SucursalModule,
   DatabaseModule,
   HttpModule,
-  // AgenteModule,
+  AgenteModule,
 ];

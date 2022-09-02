@@ -1,4 +1,4 @@
-import { Injectable, LoggerService } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { google } from 'googleapis';
 
@@ -63,7 +63,6 @@ export class CalendarService {
   POLLING_INTERVAL = 5 * 1000; // in milliseconds
 
   constructor(
-    // private loggerService: LoggerService,
     private httpService: HttpService, // @InjectSchedule() private readonly schedule: Schedule,
   ) {
     // Connecting to google calendar is asynchronous, fired from constructor

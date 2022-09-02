@@ -1,8 +1,7 @@
-import {IsNumber, IsOptional, IsString} from "class-validator";
-import {Expose} from "class-transformer";
+import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { Expose } from 'class-transformer';
 
 export class HorarioHoraActualizarDto {
-
   @IsOptional()
   @IsString()
   @Expose()
@@ -14,9 +13,7 @@ export class HorarioHoraActualizarDto {
   hasta: string;
 
   @IsOptional()
-  @IsString()
+  @IsNumber()
   @Expose()
   habilitado: 1 | 0;
-
-
 }

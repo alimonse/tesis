@@ -1,8 +1,8 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import {IsNumber, IsNotEmpty, IsString, IsOptional} from 'class-validator';
 import { Expose } from 'class-transformer';
 
 export class OficinaCrearDto {
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   @Expose()
   nombreOficina: string;
@@ -10,5 +10,5 @@ export class OficinaCrearDto {
   @IsOptional()
   @IsNumber()
   @Expose()
-  habilitado: number;
+  habilitado: 0 | 1;
 }

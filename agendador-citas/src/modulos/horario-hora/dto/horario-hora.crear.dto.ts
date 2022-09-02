@@ -1,22 +1,19 @@
-import {IsOptional, IsString} from "class-validator";
-import {Column} from "typeorm";
-import {Expose} from "class-transformer";
+import {IsNotEmpty, IsNumber, IsOptional, IsString} from 'class-validator';
+import { Expose } from 'class-transformer';
 
 export class HorarioHoraCrearDto {
-
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   @Expose()
   desde: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   @Expose()
   hasta: string;
 
   @IsOptional()
-  @IsString()
+  @IsNumber()
   @Expose()
   habilitado: 1 | 0;
-
 }

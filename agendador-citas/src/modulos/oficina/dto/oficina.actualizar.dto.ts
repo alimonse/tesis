@@ -10,5 +10,5 @@ export class OficinaActualizarDto {
   @IsOptional()
   @IsNumber()
   @Expose()
-  habilitado: number;
+  habilitado: 0 | 1;
 }

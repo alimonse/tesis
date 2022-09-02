@@ -1,33 +1,33 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import {IsNumber, IsNotEmpty, IsString, IsOptional} from 'class-validator';
 import { Expose } from 'class-transformer';
 
 export class EmpresaCrearDto {
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   @Expose()
   nombreComercial: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   @Expose()
   ruc: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   @Expose()
   mensajeSaludo: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   @Expose()
   informacion: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsNumber()
   @Expose()
   lat: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsNumber()
   @Expose()
   lng: string;

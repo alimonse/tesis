@@ -1,16 +1,19 @@
-import {IsNumber, IsOptional, IsString} from "class-validator";
+import { IsNumber, IsNotEmpty, IsString, IsOptional } from 'class-validator';
+import { Expose } from 'class-transformer';
 
 export class UsuarioCrearDto {
-
   @IsString()
-  @IsOptional()
+  @IsNotEmpty()
+  @Expose()
   nombre: string;
 
   @IsString()
-  @IsOptional()
+  @IsNotEmpty()
+  @Expose()
   telefono: string;
 
   @IsOptional()
   @IsNumber()
+  @Expose()
   habilitado: 1 | 0;
 }

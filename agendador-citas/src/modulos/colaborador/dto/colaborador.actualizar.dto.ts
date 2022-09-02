@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 import { Expose } from 'class-transformer';
 
 export class ColaboradorActualizarDto {
@@ -13,7 +13,7 @@ export class ColaboradorActualizarDto {
   correo: string;
 
   @IsOptional()
-  @IsString()
+  @IsNumber()
   @Expose()
-  habilitado: number;
+  habilitado: 0 | 1;
 }

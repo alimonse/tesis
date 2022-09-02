@@ -25,7 +25,7 @@ export class AgenteService {
       return value[0][0];
     });
 
-    console.log(this.empresa.id, 'nombreEmpresa');
+    console.log(this.empresa, 'nombreEmpresa');
   }
 
   async consultarServicios() {

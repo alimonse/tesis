@@ -1,19 +1,29 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsNotEmpty, IsString, IsOptional } from 'class-validator';
 import { Expose } from 'class-transformer';
 
 export class PrestacionesCrearDto {
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   @Expose()
-  servicio: string;
+  nombreServicio: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   @Expose()
   descripcion: string;
 
+  @IsNotEmpty()
+  @IsString()
+  @Expose()
+  tiempoAproximado: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @Expose()
+  tiempoEspera: string;
+
   @IsOptional()
   @IsNumber()
   @Expose()
-  habilitado: number;
+  habilitado: 0 | 1;
 }

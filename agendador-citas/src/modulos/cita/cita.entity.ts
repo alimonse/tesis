@@ -7,35 +7,36 @@ import { UsuarioEntity } from '../usuario/usuario.entity';
 export class CitaEntity extends EntidadPrincipal {
   @Column({
     name: 'dia',
-    type: 'datetime',
-    nullable: true,
+    type: 'date',
   })
   dia: string;
 
   @Column({
     name: 'hora_inicio',
-    type: 'time',
-    nullable: true,
+    type: 'datetime',
   })
   horaInicio: string;
 
   @Column({
     name: 'hora_fin',
-    type: 'time',
-    nullable: true,
+    type: 'datetime',
   })
   horaFin: string;
 
   @Column({
     name: 'habilitado',
     type: 'tinyint',
-    nullable: true,
+    default: 1,
   })
   habilitado: 0 | 1;
 
-  @ManyToOne(() => PrestacionesEntity, (prestaciones) => prestaciones.citas)
+  @ManyToOne(() => PrestacionesEntity, (prestaciones) => prestaciones.citas, {
+    nullable: false,
+  })
   prestaciones: PrestacionesEntity | number;
 
-  @ManyToOne(() => UsuarioEntity, (usuario) => usuario.citas)
+  @ManyToOne(() => UsuarioEntity, (usuario) => usuario.citas, {
+    nullable: false,
+  })
   usuario: UsuarioEntity | number;
 }

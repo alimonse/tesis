@@ -1,21 +1,24 @@
-import {IsNumber, IsOptional, IsString} from "class-validator";
+import {IsNumber, IsNotEmpty, IsString, IsOptional} from 'class-validator';
+import { Expose } from 'class-transformer';
 
 export class CitaCrearDto {
-
   @IsString()
-  @IsOptional()
+  @IsNotEmpty()
+  @Expose()
   dia: string;
 
   @IsString()
-  @IsOptional()
+  @IsNotEmpty()
+  @Expose()
   horaInicio: string;
 
   @IsString()
-  @IsOptional()
+  @IsNotEmpty()
+  @Expose()
   horaFin: string;
 
   @IsNumber()
   @IsOptional()
+  @Expose()
   habilitado: 0 | 1;
-
 }

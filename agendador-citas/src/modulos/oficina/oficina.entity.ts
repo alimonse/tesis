@@ -16,7 +16,7 @@ export class OficinaEntity extends EntidadPrincipal {
     type: 'tinyint',
     default: 1,
   })
-  habilitado: number;
+  habilitado: 0 | 1;
 
   @ManyToOne(() => SucursalEntity, (sucursal) => sucursal.oficinas)
   sucursal: SucursalEntity | number;

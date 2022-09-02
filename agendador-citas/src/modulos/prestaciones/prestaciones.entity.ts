@@ -3,6 +3,7 @@ import { EntidadPrincipal } from '../../clases-principales/entidad-principal';
 import { OficinaEntity } from '../oficina/oficina.entity';
 import { ColaboradorEntity } from '../colaborador/colaborador.entity';
 import { CitaEntity } from '../cita/cita.entity';
+import { HorarioDiaEntity } from '../horario-dia/horario-dia.entity';
 
 @Entity('prestaciones')
 export class PrestacionesEntity extends EntidadPrincipal {
@@ -21,14 +22,12 @@ export class PrestacionesEntity extends EntidadPrincipal {
   @Column({
     name: 'tiempo_aproximado',
     type: 'datetime',
-    nullable: true,
   })
   tiempoAproximado: string;
 
   @Column({
     name: 'tiempo_espera',
     type: 'datetime',
-    nullable: true,
   })
   tiempoEspera: string;
 
@@ -37,13 +36,16 @@ export class PrestacionesEntity extends EntidadPrincipal {
     type: 'tinyint',
     default: 1,
   })
-  habilitado: number;
+  habilitado: 0 | 1;
 
   @ManyToOne(() => OficinaEntity, (oficina) => oficina.prestaciones)
   oficina: OficinaEntity | number;
 
   @ManyToOne(() => ColaboradorEntity, (colaborador) => colaborador.prestaciones)
   colaborador: ColaboradorEntity | number;
+
+  @ManyToOne(() => HorarioDiaEntity, (horarioDia) => horarioDia.horariosHora)
+  horarioDia: HorarioDiaEntity | number;
 
   @OneToMany(() => CitaEntity, (citas) => citas.prestaciones)
   citas: CitaEntity[];

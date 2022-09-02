@@ -7,21 +7,19 @@ export class HorarioHoraEntity extends EntidadPrincipal {
   @Column({
     name: 'desde',
     type: 'datetime',
-    nullable: true,
   })
   desde: string;
 
   @Column({
     name: 'hasta',
     type: 'datetime',
-    nullable: true,
   })
   hasta: string;
 
   @Column({
     name: 'habilitado',
     type: 'tinyint',
-    nullable: true,
+    default: 1,
   })
   habilitado: 1 | 0;
 

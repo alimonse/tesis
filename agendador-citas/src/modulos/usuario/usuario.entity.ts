@@ -7,14 +7,12 @@ export class UsuarioEntity extends EntidadPrincipal {
   @Column({
     name: 'nombre',
     type: 'varchar',
-    nullable: true,
   })
   nombre: string;
 
   @Column({
     name: 'telefono',
     type: 'varchar',
-    nullable: true,
   })
   telefono: string;
 
@@ -22,7 +20,6 @@ export class UsuarioEntity extends EntidadPrincipal {
     name: 'habilitado',
     type: 'tinyint',
     default: 1,
-    nullable: true,
   })
   habilitado: 1 | 0;
 

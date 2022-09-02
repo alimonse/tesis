@@ -1,7 +1,6 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 import { EntidadPrincipal } from '../../clases-principales/entidad-principal';
 import { PrestacionesEntity } from '../prestaciones/prestaciones.entity';
-import { HorarioDiaEntity } from '../horario-dia/horario-dia.entity';
 
 @Entity('colaborador')
 export class ColaboradorEntity extends EntidadPrincipal {
@@ -22,14 +21,11 @@ export class ColaboradorEntity extends EntidadPrincipal {
     type: 'tinyint',
     default: 1,
   })
-  habilitado: number;
+  habilitado: 0 | 1;
 
   @OneToMany(
     () => PrestacionesEntity,
     (prestaciones) => prestaciones.colaborador,
   )
   prestaciones: PrestacionesEntity[];
-
-  @OneToMany(() => HorarioDiaEntity, (horariosDia) => horariosDia.colaborador)
-  horariosDia: HorarioDiaEntity[];
 }

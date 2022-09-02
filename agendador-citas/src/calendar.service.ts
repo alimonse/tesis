@@ -20,18 +20,17 @@ import { HttpService } from '@nestjs/axios';
 import { calendar_v3, google } from 'googleapis';
 import * as path from 'path';
 const event: calendar_v3.Schema$Event = {
-  summary: 'My first event!',
-  location: 'Hyderabad,India',
+  summary: 'My first event in quito!',
+  location: 'Quito,Ecuador',
   description: 'First event with nodeJS!',
   start: {
     dateTime: '2022-09-10T09:00:00-07:00',
-    timeZone: 'Asia/Dhaka',
+    timeZone: 'America/Guayaquil',
   },
   end: {
     dateTime: '2022-09-11T17:00:00-07:00',
-    timeZone: 'Asia/Dhaka',
+    timeZone: 'America/Guayaquil',
   },
-  attendees: [],
   reminders: {
     useDefault: false,
     overrides: [
@@ -68,7 +67,8 @@ export class CalendarService {
         auth: await this.auth.getClient(),
       });
 
-      // await this.createEvent()
+      await this.createEvent();
+      // await this.deleteEvent('i7gp1sh4ivbk6ts32fa7ap752g');
     } catch (err) {
       console.log(`[calendar] could not connect to calendar API: ${err}`);
       return;

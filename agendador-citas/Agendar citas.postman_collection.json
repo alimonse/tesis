@@ -512,6 +512,107 @@
 			]
 		},
 		{
+			"name": "prestaciones",
+			"item": [
+				{
+					"name": "get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3050/prestaciones",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3050",
+							"path": [
+								"prestaciones"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3050/prestaciones/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3050",
+							"path": [
+								"prestaciones",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombreServicio\": \"nombreServicio\",\n    \"descripcion\": \"descripcion\",\n    \"tiempoAproximado\": \"2022-09-02T09:17:50.914Z\",\n    \"tiempoEspera\": \"2022-09-02T09:17:50.914Z\",\n    \"oficina\": 1,\n    \"colaborador\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3050/prestaciones",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3050",
+							"path": [
+								"prestaciones"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \"hora_fin\": \"13\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3050/prestaciones/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3050",
+							"path": [
+								"prestaciones",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "horario-dia",
 			"item": [
 				{
@@ -560,7 +661,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n \"dia\": \"2022-09-02\"\n}",
+							"raw": "{\n \"dia\": \"2022-09-03\",\n \"prestacion\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -673,7 +774,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n \"desde\": \"2022-09-02T09:17:50.914Z\",\n \"hasta\": \"2022-09-02T09:17:50.914Z\",\n \"horarioDia\": 1\n}",
+							"raw": "{\n \"desde\": \"2022-09-03T09:17:50.914Z\",\n \"hasta\": \"2022-09-03T09:17:50.914Z\",\n \"horarioDia\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -717,107 +818,6 @@
 							"port": "3050",
 							"path": [
 								"horario-hora",
-								"1"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "prestaciones",
-			"item": [
-				{
-					"name": "get",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3050/prestaciones",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3050",
-							"path": [
-								"prestaciones"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get by id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3050/prestaciones/1",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3050",
-							"path": [
-								"prestaciones",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "create",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"nombreServicio\": \"nombreServicio\",\n    \"descripcion\": \"descripcion\",\n    \"tiempoAproximado\": \"2022-09-02T09:17:50.914Z\",\n    \"tiempoEspera\": \"2022-09-02T09:17:50.914Z\",\n    \"oficina\": 1,\n    \"colaborador\": 1,\n    \"horarioDia\": 1\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3050/prestaciones",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3050",
-							"path": [
-								"prestaciones"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "update",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n \"hora_fin\": \"13\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3050/prestaciones/1",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3050",
-							"path": [
-								"prestaciones",
 								"1"
 							]
 						}

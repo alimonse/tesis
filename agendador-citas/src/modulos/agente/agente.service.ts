@@ -8,12 +8,13 @@ import { CalendarService } from '../../calendar.service';
 @Injectable()
 export class AgenteService {
   constructor(
-    private readonly empresaService: EmpresaService,
-    private readonly prestacionesService: PrestacionesService,
-    private readonly calendarService: CalendarService,
+    private readonly _empresaService: EmpresaService,
+    private readonly _prestacionesService: PrestacionesService,
+    private readonly _calendarService: CalendarService,
   ) {
     // this.consultarDataEmpresa();
     // this.consultarServicios();
+    this.agendarCita('');
     this.saberEventosCalendario();
   }
   empresa;
@@ -22,7 +23,7 @@ export class AgenteService {
   diasDisponibles;
 
   async consultarDataEmpresa() {
-    this.empresa = await this.empresaService.findAll().then((value) => {
+    this.empresa = await this._empresaService.findAll().then((value) => {
       return value[0][0];
     });
 
@@ -30,7 +31,7 @@ export class AgenteService {
   }
 
   async consultarServicios() {
-    this.serviciosEmpresa = await this.prestacionesService
+    this.serviciosEmpresa = await this._prestacionesService
       .findAll()
       .then((value) => {
         return value;
@@ -44,7 +45,7 @@ export class AgenteService {
   }
 
   saberEventosCalendario() {
-    this.calendarService.listEvents();
+    this._calendarService.listEvents();
   }
 
   welcome = (agent) => {
@@ -117,5 +118,19 @@ ${this.serviciosAmostrar}`);
     intentMap.set('agendar', this.agendar);
     intentMap.set('ubicacion', this.ubicacion);
     agent.handleRequest(intentMap);
+  }
+
+  async agendarCita(nombre: string) {
+    const query = {
+      where: {
+        nombreServicio: 'nombreServicio',
+      },
+      relations: ['horarioDias', 'horarioDias.horariosHora'],
+    };
+    this._prestacionesService.findAll(JSON.stringify(query)).then((value) => {
+      console.log(value[0]);
+    });
+    // const a = this._prestacionesService.findAll(JSON.stringify(query));
+    // console.log(a);
   }
 }

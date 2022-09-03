@@ -5,6 +5,16 @@ export class CitaCrearDto {
   @IsString()
   @IsNotEmpty()
   @Expose()
+  calendarId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Expose()
+  descripcion: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Expose()
   dia: string;
 
   @IsString()

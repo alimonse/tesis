@@ -19,28 +19,8 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { calendar_v3, google } from 'googleapis';
 import * as path from 'path';
-const event: calendar_v3.Schema$Event = {
-  summary: 'My first event in quito!',
-  location: 'Quito,Ecuador',
-  description: 'First event with nodeJS!',
-  start: {
-    dateTime: '2022-09-10T09:00:00-07:00',
-    timeZone: 'America/Guayaquil',
-  },
-  end: {
-    dateTime: '2022-09-11T17:00:00-07:00',
-    timeZone: 'America/Guayaquil',
-  },
-  reminders: {
-    useDefault: false,
-    overrides: [
-      { method: 'email', minutes: 24 * 60 },
-      { method: 'popup', minutes: 10 },
-    ],
-  },
-};
-
 const calendarId = 'men9sqna8sqsenuu80gjon8olo@group.calendar.google.com';
+
 @Injectable()
 export class CalendarService {
   calendar: ReturnType<typeof google.calendar>;
@@ -67,7 +47,6 @@ export class CalendarService {
         auth: await this.auth.getClient(),
       });
 
-      await this.createEvent();
       // await this.deleteEvent('i7gp1sh4ivbk6ts32fa7ap752g');
     } catch (err) {
       console.log(`[calendar] could not connect to calendar API: ${err}`);
@@ -104,31 +83,60 @@ export class CalendarService {
       console.log(sheduleEvents);
 
       return sheduleEvents;
-    } catch (e) {
-      console.log(e, 'error');
+    } catch (err) {
+      console.log(err, 'error');
+      return [];
     }
   }
 
   async createEvent() {
-    this.calendar.events.insert(
-      {
-        auth: await this.auth.getClient(),
-        calendarId: calendarId,
-        requestBody: event,
+    const event: calendar_v3.Schema$Event = {
+      summary: 'My first event in quito!',
+      location: 'Quito,Ecuador',
+      description: 'First event with nodeJS!',
+      start: {
+        dateTime: '2022-09-10T09:00:00-07:00',
+        timeZone: 'America/Guayaquil',
       },
-      (a, b) => {
-        console.log('b, a');
-        console.log(b.data, a);
+      end: {
+        dateTime: '2022-09-11T17:00:00-07:00',
+        timeZone: 'America/Guayaquil',
       },
-    );
+      reminders: {
+        useDefault: false,
+        overrides: [
+          { method: 'email', minutes: 24 * 60 },
+          { method: 'popup', minutes: 10 },
+        ],
+      },
+    };
+    return new Promise(async (resolve) => {
+      this.calendar.events.insert(
+        {
+          auth: await this.auth.getClient(),
+          calendarId: calendarId,
+          requestBody: event,
+        },
+        (err, result) => {
+          if (err) return resolve(null);
+          resolve(result.data);
+        },
+      );
+    });
   }
 
   async deleteEvent(id: string) {
-    await this.calendar.events.delete({
-      auth: this.auth,
-      calendarId: calendarId,
-      eventId: id,
-    });
+    try {
+      await this.calendar.events.delete({
+        auth: this.auth,
+        calendarId: calendarId,
+        eventId: id,
+      });
+      return true;
+    } catch (err) {
+      console.log(`[calendar] could not delete event: ${err}`);
+      return false;
+    }
   }
 
   // async pollCalendarEvents() {

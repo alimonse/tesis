@@ -5,6 +5,16 @@ export class CitaActualizarDto {
   @IsString()
   @IsOptional()
   @Expose()
+  calendarId: string;
+
+  @IsString()
+  @IsOptional()
+  @Expose()
+  descripcion: string;
+
+  @IsString()
+  @IsOptional()
+  @Expose()
   dia: string;
 
   @IsString()

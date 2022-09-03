@@ -44,8 +44,8 @@ export class PrestacionesEntity extends EntidadPrincipal {
   @ManyToOne(() => ColaboradorEntity, (colaborador) => colaborador.prestaciones)
   colaborador: ColaboradorEntity | number;
 
-  @ManyToOne(() => HorarioDiaEntity, (horarioDia) => horarioDia.horariosHora)
-  horarioDia: HorarioDiaEntity | number;
+  @OneToMany(() => HorarioDiaEntity, (horarioDias) => horarioDias.prestacion)
+  horarioDias: HorarioDiaEntity[];
 
   @OneToMany(() => CitaEntity, (citas) => citas.prestaciones)
   citas: CitaEntity[];

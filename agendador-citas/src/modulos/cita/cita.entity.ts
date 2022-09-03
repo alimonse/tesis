@@ -6,6 +6,18 @@ import { UsuarioEntity } from '../usuario/usuario.entity';
 @Entity('cita')
 export class CitaEntity extends EntidadPrincipal {
   @Column({
+    name: 'calednar_id',
+    type: 'varchar',
+  })
+  caledarId: string;
+
+  @Column({
+    name: 'descripcion',
+    type: 'varchar',
+  })
+  descripcion: string;
+
+  @Column({
     name: 'dia',
     type: 'date',
   })

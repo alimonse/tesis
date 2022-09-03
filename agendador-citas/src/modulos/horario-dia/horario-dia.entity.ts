@@ -1,5 +1,5 @@
 import { EntidadPrincipal } from '../../clases-principales/entidad-principal';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { HorarioHoraEntity } from '../horario-hora/horario-hora.entity';
 import { PrestacionesEntity } from '../prestaciones/prestaciones.entity';
 
@@ -21,8 +21,8 @@ export class HorarioDiaEntity extends EntidadPrincipal {
   // @ManyToOne(() => ColaboradorEntity, (colaborador) => colaborador.horariosDia)
   // colaborador: ColaboradorEntity | number;
 
-  @OneToMany(() => PrestacionesEntity, (prestacion) => prestacion.horarioDia)
-  prestacion: PrestacionesEntity[];
+  @ManyToOne(() => PrestacionesEntity, (prestacion) => prestacion.horarioDias)
+  prestacion: PrestacionesEntity | number;
 
   @OneToMany(() => HorarioHoraEntity, (horariosHora) => horariosHora.horarioDia)
   horariosHora: HorarioHoraEntity[];

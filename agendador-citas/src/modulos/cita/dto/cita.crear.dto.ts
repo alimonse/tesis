@@ -1,4 +1,4 @@
-import {IsNumber, IsNotEmpty, IsString, IsOptional} from 'class-validator';
+import { IsNumber, IsNotEmpty, IsString, IsOptional } from 'class-validator';
 import { Expose } from 'class-transformer';
 
 export class CitaCrearDto {
@@ -31,4 +31,12 @@ export class CitaCrearDto {
   @IsOptional()
   @Expose()
   habilitado: 0 | 1;
+
+  @IsNumber()
+  @IsOptional()
+  usuario: number;
+
+  @IsNumber()
+  @IsOptional()
+  prestaciones: number;
 }

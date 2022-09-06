@@ -89,27 +89,27 @@ export class CalendarService {
     }
   }
 
-  async createEvent() {
-    const event: calendar_v3.Schema$Event = {
-      summary: 'My first event in quito!',
-      location: 'Quito,Ecuador',
-      description: 'First event with nodeJS!',
-      start: {
-        dateTime: '2022-09-10T09:00:00-07:00',
-        timeZone: 'America/Guayaquil',
-      },
-      end: {
-        dateTime: '2022-09-11T17:00:00-07:00',
-        timeZone: 'America/Guayaquil',
-      },
-      reminders: {
-        useDefault: false,
-        overrides: [
-          { method: 'email', minutes: 24 * 60 },
-          { method: 'popup', minutes: 10 },
-        ],
-      },
-    };
+  async createEvent(event: calendar_v3.Schema$Event) {
+    // const event: calendar_v3.Schema$Event = {
+    //   summary: 'My first event in quito!',
+    //   location: 'Quito,Ecuador',
+    //   description: 'First event with nodeJS!',
+    //   start: {
+    //     dateTime: '2022-09-10T09:00:00-07:00',
+    //     timeZone: 'America/Guayaquil',
+    //   },
+    //   end: {
+    //     dateTime: '2022-09-11T17:00:00-07:00',
+    //     timeZone: 'America/Guayaquil',
+    //   },
+    //   reminders: {
+    //     useDefault: false,
+    //     overrides: [
+    //       { method: 'email', minutes: 24 * 60 },
+    //       { method: 'popup', minutes: 10 },
+    //     ],
+    //   },
+    // };
     return new Promise(async (resolve) => {
       this.calendar.events.insert(
         {

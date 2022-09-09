@@ -875,7 +875,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"dia\": \"2022-09-02\",\n    \"horaFin\": \"2022-09-02T09:17:50.914Z\",\n    \"horaInicio\": \"2022-09-02T09:17:50.914Z\",\n    \"habilitado\": 1,\n    \"usuario\": 1,\n    \"prestaciones\": 1\n}",
+							"raw": "{\n    \"dia\": \"2022-09-02\",\n    \"horaFin\": \"2022-09-02T09:17:50.914Z\",\n    \"horaInicio\": \"2022-09-02T09:17:50.914Z\",\n    \"descripcion\": \"NUEVA\",\n    \"habilitado\": 1,\n    \"usuario\": 1,\n    \"prestaciones\": 1,\n    \"calendar\": \"caledarId\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"

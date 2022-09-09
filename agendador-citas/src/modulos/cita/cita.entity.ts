@@ -6,10 +6,10 @@ import { UsuarioEntity } from '../usuario/usuario.entity';
 @Entity('cita')
 export class CitaEntity extends EntidadPrincipal {
   @Column({
-    name: 'calednar_id',
+    name: 'calendar',
     type: 'varchar',
   })
-  caledarId: string;
+  calendar: string;
 
   @Column({
     name: 'descripcion',

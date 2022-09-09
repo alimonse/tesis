@@ -5,7 +5,7 @@ export class CitaCrearDto {
   @IsString()
   @IsNotEmpty()
   @Expose()
-  calendarId: string;
+  calendar: string;
 
   @IsString()
   @IsNotEmpty()

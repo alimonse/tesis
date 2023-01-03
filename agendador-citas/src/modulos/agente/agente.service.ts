@@ -123,6 +123,7 @@ ${this.serviciosAmostrar}`);
   };
 
   general(request, response) {
+    console.log("Respuesta en agente",request,response)
     const agent = new WebhookClient({ request, response });
     const intentMap = new Map();
     intentMap.set('welcome', this.welcome);

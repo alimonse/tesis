@@ -76,12 +76,13 @@ export class AgenteService {
   };
 
   ubicacion = (agent) => {
-    const cardInformacion = {
-      name: 'nombre',
-      imagenUrl: 'imagen',
-      text: '$ ',
-      itemId: 1,
-    };
+    agent.add(  new Card({
+      platform: 'PLATFORM_UNSPECIFIED',
+      title: 'Ubicacion empresa',
+      text: 'Gregorio bobadilla y naciones unidas',
+      buttonText: 'Ubicacion',
+      buttonUrl: 'https://www.google.com/maps/uv?pb=!1s0x91d59b4cf54dbbe5%3A0x673d6a69c30f02fc!3m1!7e115!4s%2Fmaps%2Fplace%2Fmanticore%2Blabs%2F%40-0.1747113%2C-78.494253%2C3a%2C75y%2C303.17h%2C90t%2Fdata%3D*213m4*211e1*213m2*211s-bBbAMlxCnhNZNd3yavYtg*212e0*214m2*213m1*211s0x91d59b4cf54dbbe5%3A0x673d6a69c30f02fc%3Fsa%3DX!5smanticore%20labs%20-%20Buscar%20con%20Google!15sCgIgAQ&imagekey=!1e2!2s-bBbAMlxCnhNZNd3yavYtg&hl=es-419&sa=X&ved=2ahUKEwj18Iv_pun5AhV4toQIHQw9DrAQpx96BAg7EAg'
+    }))
 
     agent.add(
       new Card({
@@ -100,8 +101,10 @@ export class AgenteService {
 
   servicios = (agent) => {
     agent.add(`Tenemos los siguientes servicios:
-Servicio 1
-Servicio 2
+                 1. Obtener requerimientos
+                 2. Contratar un equipo de desarrollo
+                 3. Tengo una idea
+Si deseas agendar una cita, da clic en "Agendar cita"
 
 ${this.serviciosAmostrar}`);
     agent.add(new Suggestion('Agendar cita'));
@@ -114,7 +117,7 @@ ${this.serviciosAmostrar}`);
     //this.servicios;
     console.log(agent.parameters, 'parametros agendar');
     agent.add(
-      `En que servicio deseas agendar un servicio? ${agent.parameters.servicio}`,
+      `Desea aceptar la cita, para cotizar un proyecto para el dia 15/09/2022 a las 15:00:00 . ${agent.parameters.servicio}`,
     );
   };
 

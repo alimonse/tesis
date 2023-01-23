@@ -7,6 +7,7 @@ import { PrestacionesService } from '../prestaciones/prestaciones.service';
 import { CalendarService } from '../../calendar.service';
 import { DateUtil } from '../../utils/date.util';
 import { CitaCrearDto } from '../cita/dto/cita.crear.dto';
+import {validateEach} from "@nestjs/common/utils/validate-each.util";
 
 @Injectable()
 export class AgenteService {
@@ -15,7 +16,7 @@ export class AgenteService {
     private readonly _prestacionesService: PrestacionesService,
     private readonly _calendarService: CalendarService,
   ) {
-    // this.consultarDataEmpresa();
+     this.consultarDataEmpresa();
     // this.consultarServicios();
     // this.horariosServicio('nombreServicio');
     const cita = new CitaCrearDto();
@@ -30,6 +31,8 @@ export class AgenteService {
     this.agendarCita('nombreServicio', cita);
     // this.saberEventosCalendario();
   }
+  mensajeSaludo;
+  nombreComercial;
   empresa;
   serviciosEmpresa;
   serviciosAmostrar;
@@ -37,6 +40,9 @@ export class AgenteService {
 
   async consultarDataEmpresa() {
     this.empresa = await this._empresaService.findAll().then((value) => {
+      console.log(value,'this is value')
+      this.mensajeSaludo = value[0][0].mensajeSaludo;
+      this.empresa = value[0][0].informacion;
       return value[0][0];
     });
 
@@ -62,13 +68,11 @@ export class AgenteService {
   }
 
   welcome = (agent) => {
+    this.consultarDataEmpresa()
     console.log(agent);
-    agent.add(
-      `¡Saludos! soy botsito, el asistente virtual de ${this.empresa.nombreComercial}, en que te puedo ayudar ? Actualmente puedo: Brindarte información sobre ${this.empresa.nombreComercial} o Agendar una cita,
-      que deseas hacer ?`,
-    );
+      agent.add( this.mensajeSaludo);
   };
-  //`Desarrollamos aplicaciones con flexibilidad de integraciones, que puedan gestionar solicitudes de multiples canales y de forma independiente segun se requiera.`
+
   informacionEmpresa = (agent) => {
     agent.add(
       `Somos una empresa Ecuatoriana, que se enfoca en realizar desarrollo a la medida tanto en aplicaciones web como móviles. Consulta sobre nuestros servicios para poder agendar una cita, estaremos gustosos de atenderte.`,

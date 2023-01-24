@@ -135,13 +135,8 @@ export class AgenteService {
       //agent.add().clear()
       console.log('entre a service');
       await this.horariosServicio(servicio);
-      console.log(this.horariosDisponibles, 'horarios');
       agent.add(`El servicio seleccionado es ${servicio}`);
-      agent.add(`//////////////////////////////`);
-
-      // agent.add(`Tenemos los siguientes dias disponibles: ${this.horariosDisponibles.join(' \n ')}`);
       agent.add(`Tenemos los siguientes dias disponibles:`);
-      // console.log(this.horariosDisponibles);
       this.horariosDisponibles.forEach((item, index) =>
         agent.add(
           new Suggestion(
@@ -222,7 +217,6 @@ export class AgenteService {
     }));
 
     this.horariosDisponibles = horarios;
-    //.map((item, index) => `${index + 1}.- ${item.dia.split('-').reverse().join('-')} en el horario de ${item.horaInicio} a ${item.horaFin}`)
     console.log(this.horariosDisponibles);
   }
 

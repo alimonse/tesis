@@ -119,7 +119,7 @@ export class AgenteService {
 
   agendar = async (agent) => {
     await this.consultarServicios();
-    agent.add(`Nota: si no se visualzan los opciones porfavor escribelas!`);
+    agent.add(`Nota: si no se visualizan los opciones porfavor escribelas!`);
     agent.add(`En que servicios deseas:`);
     this.serviciosAmostrar.forEach((item) => {
       agent.add(item);
@@ -135,8 +135,17 @@ export class AgenteService {
       //agent.add().clear()
       console.log('entre a service');
       await this.horariosServicio(servicio);
+      agent.add(`Nota: si no se visualizan los opciones porfavor escribelas!`);
       agent.add(`El servicio seleccionado es ${servicio}`);
       agent.add(`Tenemos los siguientes dias disponibles:`);
+      this.horariosDisponibles.forEach((item, index) =>
+        agent.add(
+          `${index + 1}.- ${item.dia
+            .split('-')
+            .reverse()
+            .join('-')} en el horario de ${item.horaInicio} a ${item.horaFin}`,
+        ),
+      );
       this.horariosDisponibles.forEach((item, index) =>
         agent.add(
           new Suggestion(

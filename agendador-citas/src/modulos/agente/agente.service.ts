@@ -138,40 +138,40 @@ export class AgenteService {
       agent.add(`Nota: si no se visualizan los opciones porfavor escribelas!`);
       agent.add(`El servicio seleccionado es ${servicio}`);
       agent.add(`Tenemos los siguientes dias disponibles:`);
-      this.horariosDisponibles.forEach((item, index) =>
-        agent.add(
-          `${index + 1}.- ${item.dia
-            .split('-')
-            .reverse()
-            .join('-')} en el horario de ${item.horaInicio} a ${item.horaFin}`,
-        ),
-      );
-      this.horariosDisponibles.forEach((item, index) =>
-        agent.add(
-          new Suggestion(
-            `${index + 1}.- ${item.dia
-              .split('-')
-              .reverse()
-              .join('-')} en el horario de ${item.horaInicio} a ${
-              item.horaFin
-            }`,
-          ),
-        ),
-      );
+      // this.horariosDisponibles.forEach((item, index) =>
+      //   agent.add(
+      //     `${index + 1}.- ${item.dia
+      //       .split('-')
+      //       .reverse()
+      //       .join('-')} en el horario de ${item.horaInicio} a ${item.horaFin}`,
+      //   ),
+      // );
+      // this.horariosDisponibles.forEach((item, index) =>
+      //   agent.add(
+      //     new Suggestion(
+      //       `${index + 1}.- ${item.dia
+      //         .split('-')
+      //         .reverse()
+      //         .join('-')} en el horario de ${item.horaInicio} a ${
+      //         item.horaFin
+      //       }`,
+      //     ),
+      //   ),
+      // );
       const serviceFind = this.serviciosEmpresa[0].find(
         (item) => item.nombreServicio === servicio,
       );
       const cita = new CitaCrearDto();
-      cita.dia = agent.parameters.fecha.split('T')[0];
-      cita.horaFin = agent.parameters.fin || new Date(Date.now()).toISOString();
-      cita.horaInicio = agent.parameters.inicio;
-      // cita.caledarId = 'calendariD';
-      cita.descripcion = 'cita servicio: ' + servicio;
-      cita.habilitado = 1;
-      cita.usuario = 1;
-      cita.prestaciones = serviceFind.id;
-      console.log(cita);
-      await this.agendarCita(servicio, agent, cita);
+      // cita.dia = agent.parameters.fecha.split('T')[0];
+      // cita.horaFin = agent.parameters.fin || new Date(Date.now()).toISOString();
+      // cita.horaInicio = agent.parameters.inicio;
+      // // cita.caledarId = 'calendariD';
+      // cita.descripcion = 'cita servicio: ' + servicio;
+      // cita.habilitado = 1;
+      // cita.usuario = 1;
+      // cita.prestaciones = serviceFind.id;
+      // console.log(cita);
+      // await this.agendarCita(servicio, agent, cita);
       // this.cita = cita
     }
 

@@ -177,6 +177,10 @@ export class AgenteService {
 `;
   };
 
+  fin = (agente) => {
+    agente.add('Su servicio a sido agendado correctamente')
+  }
+
   general(request, response) {
     const agent = new WebhookClient({ request, response });
     const intentMap = new Map();
@@ -185,6 +189,7 @@ export class AgenteService {
     intentMap.set('servicios', this.servicios);
     intentMap.set('agendar', this.agendar);
     intentMap.set('ubicacion', this.ubicacion);
+    intentMap.set('fin',this.fin);
     agent.handleRequest(intentMap);
   }
 

@@ -127,7 +127,11 @@ export class AgenteService {
     this.serviciosAmostrar.forEach((item) => {
       agent.add(new Suggestion(`${item}`));
     });
+    console.log('data entra');
+    console.log(agent.parameters);
+    console.log(agent.parameters.servicio);
     const servicio = agent.parameters.servicio;
+    console.log(servicio);
     // this.serviciosEmpresa.find(item => item.mo)
     agent.add(`*****`);
 

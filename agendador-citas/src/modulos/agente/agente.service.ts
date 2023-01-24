@@ -163,17 +163,17 @@ export class AgenteService {
         (item) => item.nombreServicio === servicio,
       );
       const cita = new CitaCrearDto();
-      // cita.dia = agent.parameters.fecha.split('T')[0];
-      // cita.horaFin = agent.parameters.fin || new Date(Date.now()).toISOString();
-      // cita.horaInicio = agent.parameters.inicio;
-      // // cita.caledarId = 'calendariD';
-      // cita.descripcion = 'cita servicio: ' + servicio;
-      // cita.habilitado = 1;
-      // cita.usuario = 1;
-      // cita.prestaciones = serviceFind.id;
-      // console.log(cita);
-      // await this.agendarCita(servicio, agent, cita);
-      // this.cita = cita
+      cita.dia = agent.parameters.fecha.split('T')[0];
+      cita.horaFin = agent.parameters.fin || new Date(Date.now()).toISOString();
+      cita.horaInicio = agent.parameters.inicio;
+      // cita.caledarId = 'calendariD';
+      cita.descripcion = 'cita servicio: ' + servicio;
+      cita.habilitado = 1;
+      cita.usuario = 1;
+      cita.prestaciones = serviceFind.id;
+      console.log(cita);
+      await this.agendarCita(servicio, agent, cita);
+      this.cita = cita
     }
 
     // console.log('cita',this.cita)

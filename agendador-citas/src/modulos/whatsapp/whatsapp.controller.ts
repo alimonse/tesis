@@ -13,7 +13,8 @@ export class WhatsappController {
 
   @Post('receive')
   receive(@Body() payload: BodyTwilioInterface) {
-    console.log(payload.Body);
+    console.log(payload);
+    this._whatsAppService.chatBot(payload.Body, payload.WaId);
     return 'recive';
   }
 }

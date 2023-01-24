@@ -7,8 +7,6 @@ export class AgenteController {
 
   @Post('')
   async botFulfillment(@Req() request, @Res() response) {
-  //  console.log(request);
-   // console.log(response.req.body.queryResult);
     this._agente.general(request, response);
   }
 }

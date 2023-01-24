@@ -1,6 +1,6 @@
-import {Body, Controller, Post} from '@nestjs/common';
-import {BodyTwilioInterface} from "../../interfaces/body-twilio.interface";
-import {WhatsappService} from "./whatsapp.service";
+import { Body, Controller, Post } from '@nestjs/common';
+import { BodyTwilioInterface } from '../../interfaces/body-twilio.interface';
+import { WhatsappService } from './whatsapp.service';
 
 @Controller('whatsapp')
 export class WhatsappController {

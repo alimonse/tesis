@@ -7,8 +7,6 @@ import { PrestacionesService } from '../prestaciones/prestaciones.service';
 import { CalendarService } from '../../calendar.service';
 import { DateUtil } from '../../utils/date.util';
 import { CitaCrearDto } from '../cita/dto/cita.crear.dto';
-import {validateEach} from "@nestjs/common/utils/validate-each.util";
-import {agent} from "supertest";
 
 @Injectable()
 export class AgenteService {
@@ -16,19 +14,19 @@ export class AgenteService {
   nombreComercial;
   empresa;
   sobreEmpresa = '';
-  horariosDisponibles:any[] = [];
+  horariosDisponibles: any[] = [];
   serviciosEmpresa;
   serviciosAmostrar;
   diasDisponibles;
-  cita
+  cita;
 
   constructor(
     private readonly _empresaService: EmpresaService,
     private readonly _prestacionesService: PrestacionesService,
     private readonly _calendarService: CalendarService,
   ) {
-     this.consultarDataEmpresa().then();
-     this.consultarServicios().then();
+    this.consultarDataEmpresa().then();
+    this.consultarServicios().then();
     // this.horariosServicio('nombreServicio');
     // const cita = new CitaCrearDto();
     // cita.dia = '2023-01-23';
@@ -70,23 +68,26 @@ export class AgenteService {
   }
 
   welcome = async (agent) => {
-    await this.consultarDataEmpresa()
+    await this.consultarDataEmpresa();
     agent.add(this.mensajeSaludo);
   };
 
   informacionEmpresa = async (agent) => {
-    await this.consultarDataEmpresa()
-    agent.add(this.sobreEmpresa)
+    await this.consultarDataEmpresa();
+    agent.add(this.sobreEmpresa);
   };
 
   ubicacion = (agent) => {
-    agent.add(  new Card({
-      platform: 'PLATFORM_UNSPECIFIED',
-      title: 'Ubicacion empresa',
-      text: 'Gregorio bobadilla y naciones unidas',
-      buttonText: 'Ubicacion',
-      buttonUrl: 'https://www.google.com/maps/uv?pb=!1s0x91d59b4cf54dbbe5%3A0x673d6a69c30f02fc!3m1!7e115!4s%2Fmaps%2Fplace%2Fmanticore%2Blabs%2F%40-0.1747113%2C-78.494253%2C3a%2C75y%2C303.17h%2C90t%2Fdata%3D*213m4*211e1*213m2*211s-bBbAMlxCnhNZNd3yavYtg*212e0*214m2*213m1*211s0x91d59b4cf54dbbe5%3A0x673d6a69c30f02fc%3Fsa%3DX!5smanticore%20labs%20-%20Buscar%20con%20Google!15sCgIgAQ&imagekey=!1e2!2s-bBbAMlxCnhNZNd3yavYtg&hl=es-419&sa=X&ved=2ahUKEwj18Iv_pun5AhV4toQIHQw9DrAQpx96BAg7EAg'
-    }))
+    agent.add(
+      new Card({
+        platform: 'PLATFORM_UNSPECIFIED',
+        title: 'Ubicacion empresa',
+        text: 'Gregorio bobadilla y naciones unidas',
+        buttonText: 'Ubicacion',
+        buttonUrl:
+          'https://www.google.com/maps/uv?pb=!1s0x91d59b4cf54dbbe5%3A0x673d6a69c30f02fc!3m1!7e115!4s%2Fmaps%2Fplace%2Fmanticore%2Blabs%2F%40-0.1747113%2C-78.494253%2C3a%2C75y%2C303.17h%2C90t%2Fdata%3D*213m4*211e1*213m2*211s-bBbAMlxCnhNZNd3yavYtg*212e0*214m2*213m1*211s0x91d59b4cf54dbbe5%3A0x673d6a69c30f02fc%3Fsa%3DX!5smanticore%20labs%20-%20Buscar%20con%20Google!15sCgIgAQ&imagekey=!1e2!2s-bBbAMlxCnhNZNd3yavYtg&hl=es-419&sa=X&ved=2ahUKEwj18Iv_pun5AhV4toQIHQw9DrAQpx96BAg7EAg',
+      }),
+    );
 
     agent.add(
       new Card({
@@ -104,36 +105,58 @@ export class AgenteService {
   };
 
   servicios = (agent) => {
-    let msg = `Tenemos los siguientes servicios:\n${this.serviciosAmostrar}
-      \n Si deseas agendar una cita, da clic en "Agendar cita"`
-    agent.add(msg);
+    // const msg = `Tenemos los siguientes servicios:\n${this.serviciosAmostrar}
+    //   \n Si deseas agendar una cita, da clic en "Agendar cita"`;
+    agent.add('Tenemos los siguientes servicios');
+    this.serviciosAmostrar.forEach((item) => console.log(item));
+    this.serviciosAmostrar.forEach((item) => {
+      agent.add(`${item}`);
+    });
+    // agent.add(`${this.serviciosAmostrar}`);
+    agent.add('Si deseas agendar una cita, escriba o de clic "Agendar cita"');
     agent.add(new Suggestion('Agendar cita'));
   };
 
   agendar = async (agent) => {
-    await this.consultarServicios()
-    // agent.add(`En que servicios deseas: ${this.serviciosAmostrar}`)
-    agent.add(`En que servicios deseas: `)
-    this.serviciosAmostrar.forEach((item) => agent.add(new Suggestion(`${item}`) ))
+    await this.consultarServicios();
+    agent.add(`Nota: si no se visualzan los opciones porfavor escribelas!`);
+    agent.add(`En que servicios deseas:`);
+    this.serviciosAmostrar.forEach((item) => {
+      agent.add(item);
+      agent.add(new Suggestion(`${item}`));
+    });
     const servicio = agent.parameters.servicio;
     // this.serviciosEmpresa.find(item => item.mo)
-    agent.add(`*****`)
+    agent.add(`*****`);
 
-    if(servicio) {
+    if (servicio) {
       //agent.add().clear()
-      console.log('entre a service')
-      await this.horariosServicio(servicio)
-      console.log(this.horariosDisponibles, 'horarios')
-      agent.add(`El servicio seleccionado es ${servicio}`)
-      agent.add(`//////////////////////////////`)
+      console.log('entre a service');
+      await this.horariosServicio(servicio);
+      console.log(this.horariosDisponibles, 'horarios');
+      agent.add(`El servicio seleccionado es ${servicio}`);
+      agent.add(`//////////////////////////////`);
 
       // agent.add(`Tenemos los siguientes dias disponibles: ${this.horariosDisponibles.join(' \n ')}`);
       agent.add(`Tenemos los siguientes dias disponibles:`);
-      console.log(this.horariosDisponibles)
-      this.horariosDisponibles.forEach((item, index) => agent.add(new Suggestion(`${index + 1}.- ${item.dia.split('-').reverse().join('-')} en el horario de ${item.horaInicio} a ${item.horaFin}`) ))
-      const serviceFind = this.serviciosEmpresa[0].find(item => item.nombreServicio === servicio);
+      console.log(this.horariosDisponibles);
+      this.horariosDisponibles.forEach((item, index) =>
+        agent.add(
+          new Suggestion(
+            `${index + 1}.- ${item.dia
+              .split('-')
+              .reverse()
+              .join('-')} en el horario de ${item.horaInicio} a ${
+              item.horaFin
+            }`,
+          ),
+        ),
+      );
+      const serviceFind = this.serviciosEmpresa[0].find(
+        (item) => item.nombreServicio === servicio,
+      );
       const cita = new CitaCrearDto();
-      cita.dia =  agent.parameters.fecha.split('T')[0]
+      cita.dia = agent.parameters.fecha.split('T')[0];
       cita.horaFin = agent.parameters.fin || new Date(Date.now()).toISOString();
       cita.horaInicio = agent.parameters.inicio;
       // cita.caledarId = 'calendariD';
@@ -141,17 +164,16 @@ export class AgenteService {
       cita.habilitado = 1;
       cita.usuario = 1;
       cita.prestaciones = serviceFind.id;
-      console.log(cita)
-      await this.agendarCita(servicio, agent, cita)
+      console.log(cita);
+      await this.agendarCita(servicio, agent, cita);
       // this.cita = cita
     }
 
     // console.log('cita',this.cita)
 
-
     // console.log(this.diasDisponibles,'dias disponibleeees');
     // console.log(agent.parameters, 'parametros agendar');
-   // agent.add(`En que servicios deseas . ${agent.parameters.servicio}`,)
+    // agent.add(`En que servicios deseas . ${agent.parameters.servicio}`,)
     //agent.add(
     //  `Desea aceptar la cita, para cotizar un proyecto para el dia 15/09/2022 a las 15:00:00 . ${agent.parameters.servicio}`,
     // );
@@ -180,7 +202,9 @@ export class AgenteService {
       },
       relations: ['horarioDias', 'horarioDias.horariosHora', 'citas'],
     };
-    const value = await this._prestacionesService.findAll(JSON.stringify(query))
+    const value = await this._prestacionesService.findAll(
+      JSON.stringify(query),
+    );
     if (!value[0].length) {
       console.log('sin data');
       return;
@@ -195,15 +219,12 @@ export class AgenteService {
       hasta: horaioDia.horariosHora[0].hasta,
     }));
 
-
-    this.horariosDisponibles = horarios
-      //.map((item, index) => `${index + 1}.- ${item.dia.split('-').reverse().join('-')} en el horario de ${item.horaInicio} a ${item.horaFin}`)
-    console.log(this.horariosDisponibles)
+    this.horariosDisponibles = horarios;
+    //.map((item, index) => `${index + 1}.- ${item.dia.split('-').reverse().join('-')} en el horario de ${item.horaInicio} a ${item.horaFin}`)
+    console.log(this.horariosDisponibles);
   }
 
-  async agendarCita(nombreServicio: string, agent: any,  cita?: CitaCrearDto,) {
-
-
+  async agendarCita(nombreServicio: string, agent: any, cita?: CitaCrearDto) {
     const query = {
       where: {
         nombreServicio,

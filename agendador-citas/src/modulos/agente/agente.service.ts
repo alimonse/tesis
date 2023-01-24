@@ -114,27 +114,21 @@ export class AgenteService {
     });
     // agent.add(`${this.serviciosAmostrar}`);
     agent.add('Si deseas agendar una cita, escriba o de clic "Agendar cita"');
-    agent.add(new Suggestion('Agendar cita'));
+   // agent.add(new Suggestion('Agendar cita'));
   };
 
-  agendar = async (agent) => {
-    console.log(agent.parameters.servicio);
-    let servicio = agent.parameters.servicio;
+  agendar =  async (agent) => {
     await this.consultarServicios();
-    if (agent.parameters.servicio === '') {
-      agent.add(`Nota: si no se visualizan los opciones porfavor escribelas!`);
-      agent.add(`En que servicios deseas:`);
+    console.log(agent.parameters.servicio)
+    agent.add(`Nota: si no se visualizan los opciones porfavor escribelas!`);
+    agent.add(`En que servicios deseas:`);
+    if(this.serviciosAmostrar.length > 0){
       this.serviciosAmostrar.forEach((item) => {
         agent.add(item);
       });
-      this.serviciosAmostrar.forEach((item) => {
-        agent.add(new Suggestion(`${item}`));
-      });
-    } else {
-      servicio = agent.parameters.servicio;
     }
-    console.log(servicio);
-    agent.add(`***********`);
+    const servicio = agent.parameters.servicio;
+    agent.add(`......`);
     if (servicio) {
       console.log('entre a service');
       await this.horariosServicio(servicio);
@@ -147,18 +141,6 @@ export class AgenteService {
             .split('-')
             .reverse()
             .join('-')} en el horario de ${item.horaInicio} a ${item.horaFin}`,
-        ),
-      );
-      this.horariosDisponibles.forEach((item, index) =>
-        agent.add(
-          new Suggestion(
-            `${index + 1}.- ${item.dia
-              .split('-')
-              .reverse()
-              .join('-')} en el horario de ${item.horaInicio} a ${
-              item.horaFin
-            }`,
-          ),
         ),
       );
       const serviceFind = this.serviciosEmpresa[0].find(
@@ -177,7 +159,7 @@ export class AgenteService {
       await this.agendarCita(servicio, agent, cita);
       agent.add('Cita registrada con exito')
       // agent.add().clear()
-      this.cita = cita
+      // this.cita = cita
     }
 
     // console.log('cita',this.cita)

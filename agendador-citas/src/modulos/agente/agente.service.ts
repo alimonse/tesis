@@ -123,6 +123,8 @@ export class AgenteService {
     agent.add(`En que servicios deseas:`);
     this.serviciosAmostrar.forEach((item) => {
       agent.add(item);
+    });
+    this.serviciosAmostrar.forEach((item) => {
       agent.add(new Suggestion(`${item}`));
     });
     const servicio = agent.parameters.servicio;
@@ -139,7 +141,7 @@ export class AgenteService {
 
       // agent.add(`Tenemos los siguientes dias disponibles: ${this.horariosDisponibles.join(' \n ')}`);
       agent.add(`Tenemos los siguientes dias disponibles:`);
-      console.log(this.horariosDisponibles);
+      // console.log(this.horariosDisponibles);
       this.horariosDisponibles.forEach((item, index) =>
         agent.add(
           new Suggestion(

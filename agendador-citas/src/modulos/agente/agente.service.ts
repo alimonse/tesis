@@ -118,8 +118,10 @@ export class AgenteService {
   };
 
   agendar = async (agent) => {
+    console.log(agent.parameters.servicio);
+    let servicio = agent.parameters.servicio;
+    await this.consultarServicios();
     if (agent.parameters.servicio === '') {
-      await this.consultarServicios();
       agent.add(`Nota: si no se visualizan los opciones porfavor escribelas!`);
       agent.add(`En que servicios deseas:`);
       this.serviciosAmostrar.forEach((item) => {
@@ -128,11 +130,10 @@ export class AgenteService {
       this.serviciosAmostrar.forEach((item) => {
         agent.add(new Suggestion(`${item}`));
       });
-    } else {}
-
-    const servicio = agent.parameters.servicio;
+    } else {
+      servicio = agent.parameters.servicio;
+    }
     console.log(servicio);
-    // this.serviciosEmpresa.find(item => item.mo)
     agent.add(`***********`);
     if (servicio) {
       console.log('entre a service');

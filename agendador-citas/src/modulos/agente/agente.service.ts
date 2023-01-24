@@ -11,42 +11,45 @@ import {validateEach} from "@nestjs/common/utils/validate-each.util";
 
 @Injectable()
 export class AgenteService {
+  mensajeSaludo;
+  nombreComercial;
+  empresa;
+  sobreEmpresa = '';
+  horariosDisponibles:string[] = [];
+  serviciosEmpresa;
+  serviciosAmostrar;
+  diasDisponibles;
+  cita
+
   constructor(
     private readonly _empresaService: EmpresaService,
     private readonly _prestacionesService: PrestacionesService,
     private readonly _calendarService: CalendarService,
   ) {
      this.consultarDataEmpresa();
-    // this.consultarServicios();
+     this.consultarServicios();
     // this.horariosServicio('nombreServicio');
     const cita = new CitaCrearDto();
-    cita.dia = '2022-09-09';
-    cita.horaFin = '2022-09-09T16:00:00.000Z';
-    cita.horaInicio = '2022-09-09T14:00:00.000Z';
+    cita.dia = '2023-01-23';
+    cita.horaFin = '2023-01-23T17:15:00.000Z';
+    cita.horaInicio = '2023-01-23T16:15:00.000Z';
     // cita.caledarId = 'calendariD';
     cita.descripcion = 'NUEVA';
     cita.habilitado = 1;
     cita.usuario = 1;
     cita.prestaciones = 1;
-    this.agendarCita('nombreServicio', cita);
+    this.cita = cita
+    this.agendarCita('Analisis de requerimientos', cita);
     // this.saberEventosCalendario();
   }
-  mensajeSaludo;
-  nombreComercial;
-  empresa;
-  serviciosEmpresa;
-  serviciosAmostrar;
-  diasDisponibles;
 
   async consultarDataEmpresa() {
     this.empresa = await this._empresaService.findAll().then((value) => {
-      console.log(value,'this is value')
       this.mensajeSaludo = value[0][0].mensajeSaludo;
       this.empresa = value[0][0].informacion;
+      this.sobreEmpresa = value[0][0].informacion;
       return value[0][0];
     });
-
-    console.log(this.empresa, 'nombreEmpresa');
   }
 
   async consultarServicios() {
@@ -59,24 +62,20 @@ export class AgenteService {
     this.serviciosAmostrar = this.serviciosEmpresa[0].map((servicios) => {
       return servicios.nombreServicio;
     });
-
-    console.log(this.serviciosAmostrar, 'serviciosEmpresa');
   }
 
   saberEventosCalendario() {
     this._calendarService.listEvents();
   }
 
-  welcome = (agent) => {
-    this.consultarDataEmpresa()
-    console.log(agent);
-      agent.add( this.mensajeSaludo);
+  welcome = async (agent) => {
+    await this.consultarDataEmpresa()
+    agent.add(this.mensajeSaludo);
   };
 
-  informacionEmpresa = (agent) => {
-    agent.add(
-      `Somos una empresa Ecuatoriana, que se enfoca en realizar desarrollo a la medida tanto en aplicaciones web como móviles. Consulta sobre nuestros servicios para poder agendar una cita, estaremos gustosos de atenderte.`,
-    );
+  informacionEmpresa = async (agent) => {
+    await this.consultarDataEmpresa()
+    agent.add(this.sobreEmpresa)
   };
 
   ubicacion = (agent) => {
@@ -104,33 +103,45 @@ export class AgenteService {
   };
 
   servicios = (agent) => {
-    agent.add(`Tenemos los siguientes servicios:
-                 1. Obtener requerimientos
-                 2. Contratar un equipo de desarrollo
-                 3. Tengo una idea
-Si deseas agendar una cita, da clic en "Agendar cita"
-
-${this.serviciosAmostrar}`);
+    let msg = `Tenemos los siguientes servicios:\n${this.serviciosAmostrar}
+      \n Si deseas agendar una cita, da clic en "Agendar cita"`
+    agent.add(msg);
     agent.add(new Suggestion('Agendar cita'));
-    console.log(agent.parameters, 'Parametros');
-    const servicio = agent.parameters.cita;
-    console.log(servicio, 'servicio que mmmmmmmmmanda dialogflow');
+    // const servicio = agent.parameters.servicio;
   };
 
-  agendar = (agent) => {
-    //this.servicios;
+  agendar = async (agent) => {
+    await this.consultarServicios()
+    agent.add(`En que servicios deseas: ${this.serviciosAmostrar}`)
+    const servicio = agent.parameters.servicio;
+
+    if(servicio) {
+      console.log('entre a service')
+      await this.horariosServicio(servicio)
+      console.log(this.horariosDisponibles, 'horarios')
+      agent.add(`El servicio seleccionado es ${servicio}`)
+
+      // agent.add(`Tenemos los siguientes dias disponibles: ${this.horariosDisponibles.join(' \n ')}`);
+      agent.add(`Tenemos los siguientes dias disponibles:`);
+
+      this.horariosDisponibles.forEach((item, index) => agent.add(new Suggestion(`${item}`) ))
+    }
+
+    this.agendarCita(servicio,this.cita)
+    console.log(this.diasDisponibles,'dias disponibleeees');
     console.log(agent.parameters, 'parametros agendar');
-    agent.add(
-      `Desea aceptar la cita, para cotizar un proyecto para el dia 15/09/2022 a las 15:00:00 . ${agent.parameters.servicio}`,
-    );
+   // agent.add(`En que servicios deseas . ${agent.parameters.servicio}`,)
+    //agent.add(
+    //  `Desea aceptar la cita, para cotizar un proyecto para el dia 15/09/2022 a las 15:00:00 . ${agent.parameters.servicio}`,
+    // );
   };
 
   dia = (agente) => {
-    `Tenemos los siguientes dias disponibles ${this.diasDisponibles}`;
+    `Tenemos los siguientes dias disponibles 2022-09-03 en el horario de 4:15 a 5:15
+`;
   };
 
   general(request, response) {
-    console.log("Respuesta en agente",request,response)
     const agent = new WebhookClient({ request, response });
     const intentMap = new Map();
     intentMap.set('welcome', this.welcome);
@@ -148,25 +159,27 @@ ${this.serviciosAmostrar}`);
       },
       relations: ['horarioDias', 'horarioDias.horariosHora', 'citas'],
     };
-    this._prestacionesService.findAll(JSON.stringify(query)).then((value) => {
-      if (!value[0].length) {
-        console.log('sin data');
-        return;
-      }
-      const horarios = value[0][0].horarioDias.map((horaioDia) => ({
-        aproximado: format(new Date(value[0][0].tiempoAproximado), 'mm'),
-        espera: format(new Date(value[0][0].tiempoEspera), 'mm'),
-        dia: horaioDia.dia,
-        horaInicio: format(new Date(horaioDia.horariosHora[0].desde), 'HH:mm'),
-        horaFin: format(new Date(horaioDia.horariosHora[0].hasta), 'HH:mm'),
-        desde: horaioDia.horariosHora[0].desde,
-        hasta: horaioDia.horariosHora[0].hasta,
-      }));
-      console.log(horarios);
-    });
+    const value = await this._prestacionesService.findAll(JSON.stringify(query))
+    if (!value[0].length) {
+      console.log('sin data');
+      return;
+    }
+    const horarios = value[0][0].horarioDias.map((horaioDia) => ({
+      aproximado: format(new Date(value[0][0].tiempoAproximado), 'mm'),
+      espera: format(new Date(value[0][0].tiempoEspera), 'mm'),
+      dia: horaioDia.dia,
+      horaInicio: format(new Date(horaioDia.horariosHora[0].desde), 'HH:mm'),
+      horaFin: format(new Date(horaioDia.horariosHora[0].hasta), 'HH:mm'),
+      desde: horaioDia.horariosHora[0].desde,
+      hasta: horaioDia.horariosHora[0].hasta,
+    }));
+
+
+    this.horariosDisponibles = horarios.map((item, index) => `${index + 1}.- ${item.dia.split('-').reverse().join('-')} en el horario de ${item.horaInicio} a ${item.horaFin}`)
+    console.log(this.horariosDisponibles)
   }
 
-  async agendarCita(nombreServicio: string, cita: CitaCrearDto) {
+  async agendarCita(nombreServicio: string, cita?: CitaCrearDto) {
     const query = {
       where: {
         nombreServicio,
@@ -274,29 +287,29 @@ ${this.serviciosAmostrar}`);
         };
         console.log(preCita);
 
-        // this._calendarService
-        //   .createEvent({
-        //     summary: 'Cita - servicio',
-        //     location: 'Quito,Ecuador',
-        //     description: 'servicio de desarrllo y consultoria',
-        //     start: {
-        //       dateTime: DateUtil.formatCalenda(preCita.dateTimeStart),
-        //       timeZone: 'America/Guayaquil',
-        //     },
-        //     end: {
-        //       dateTime: DateUtil.formatCalenda(preCita.dateTimeEnd),
-        //       timeZone: 'America/Guayaquil',
-        //     },
-        //     reminders: {
-        //       useDefault: false,
-        //       overrides: [
-        //         { method: 'email', minutes: 24 * 60 },
-        //         { method: 'popup', minutes: 10 },
-        //       ],
-        //     },
-        //   })
-        //   .then(console.log)
-        //   .catch(console.log);
+        this._calendarService
+          .createEvent({
+            summary: 'Cita - servicio',
+            location: 'Quito,Ecuador',
+            description: 'Analisis de requerimientos',
+            start: {
+              dateTime: DateUtil.formatCalenda(preCita.dateTimeStart),
+              timeZone: 'America/Guayaquil',
+            },
+            end: {
+              dateTime: DateUtil.formatCalenda(preCita.dateTimeEnd),
+              timeZone: 'America/Guayaquil',
+            },
+            reminders: {
+              useDefault: false,
+              overrides: [
+                { method: 'email', minutes: 24 * 60 },
+                { method: 'popup', minutes: 10 },
+              ],
+            },
+          })
+          .then(console.log)
+          .catch(console.log);
       }
     });
   }

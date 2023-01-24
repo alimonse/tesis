@@ -8,6 +8,7 @@ import { CalendarService } from '../../calendar.service';
 import { DateUtil } from '../../utils/date.util';
 import { CitaCrearDto } from '../cita/dto/cita.crear.dto';
 import {validateEach} from "@nestjs/common/utils/validate-each.util";
+import {agent} from "supertest";
 
 @Injectable()
 export class AgenteService {
@@ -15,7 +16,7 @@ export class AgenteService {
   nombreComercial;
   empresa;
   sobreEmpresa = '';
-  horariosDisponibles:string[] = [];
+  horariosDisponibles:any[] = [];
   serviciosEmpresa;
   serviciosAmostrar;
   diasDisponibles;
@@ -26,20 +27,20 @@ export class AgenteService {
     private readonly _prestacionesService: PrestacionesService,
     private readonly _calendarService: CalendarService,
   ) {
-     this.consultarDataEmpresa();
-     this.consultarServicios();
+     this.consultarDataEmpresa().then();
+     this.consultarServicios().then();
     // this.horariosServicio('nombreServicio');
-    const cita = new CitaCrearDto();
-    cita.dia = '2023-01-23';
-    cita.horaFin = '2023-01-23T17:15:00.000Z';
-    cita.horaInicio = '2023-01-23T16:15:00.000Z';
-    // cita.caledarId = 'calendariD';
-    cita.descripcion = 'NUEVA';
-    cita.habilitado = 1;
-    cita.usuario = 1;
-    cita.prestaciones = 1;
-    this.cita = cita
-    this.agendarCita('Analisis de requerimientos', cita);
+    // const cita = new CitaCrearDto();
+    // cita.dia = '2023-01-23';
+    // cita.horaFin = '2023-01-23T17:15:00.000Z';
+    // cita.horaInicio = '2023-01-23T16:15:00.000Z';
+    // // cita.caledarId = 'calendariD';
+    // cita.descripcion = 'NUEVA';
+    // cita.habilitado = 1;
+    // cita.usuario = 1;
+    // cita.prestaciones = 1;
+    // this.cita = cita
+    // this.agendarCita('Analisis de requerimientos', cita);
     // this.saberEventosCalendario();
   }
 
@@ -107,29 +108,49 @@ export class AgenteService {
       \n Si deseas agendar una cita, da clic en "Agendar cita"`
     agent.add(msg);
     agent.add(new Suggestion('Agendar cita'));
-    // const servicio = agent.parameters.servicio;
   };
 
   agendar = async (agent) => {
     await this.consultarServicios()
-    agent.add(`En que servicios deseas: ${this.serviciosAmostrar}`)
+    // agent.add(`En que servicios deseas: ${this.serviciosAmostrar}`)
+    agent.add(`En que servicios deseas: `)
+    this.serviciosAmostrar.forEach((item) => agent.add(new Suggestion(`${item}`) ))
     const servicio = agent.parameters.servicio;
+    // this.serviciosEmpresa.find(item => item.mo)
+    agent.add(`*****`)
 
     if(servicio) {
+      //agent.add().clear()
       console.log('entre a service')
       await this.horariosServicio(servicio)
       console.log(this.horariosDisponibles, 'horarios')
       agent.add(`El servicio seleccionado es ${servicio}`)
+      agent.add(`//////////////////////////////`)
 
       // agent.add(`Tenemos los siguientes dias disponibles: ${this.horariosDisponibles.join(' \n ')}`);
       agent.add(`Tenemos los siguientes dias disponibles:`);
-
-      this.horariosDisponibles.forEach((item, index) => agent.add(new Suggestion(`${item}`) ))
+      console.log(this.horariosDisponibles)
+      this.horariosDisponibles.forEach((item, index) => agent.add(new Suggestion(`${index + 1}.- ${item.dia.split('-').reverse().join('-')} en el horario de ${item.horaInicio} a ${item.horaFin}`) ))
+      const serviceFind = this.serviciosEmpresa[0].find(item => item.nombreServicio === servicio);
+      const cita = new CitaCrearDto();
+      cita.dia =  agent.parameters.fecha.split('T')[0]
+      cita.horaFin = agent.parameters.fin || new Date(Date.now()).toISOString();
+      cita.horaInicio = agent.parameters.inicio;
+      // cita.caledarId = 'calendariD';
+      cita.descripcion = 'cita servicio: ' + servicio;
+      cita.habilitado = 1;
+      cita.usuario = 1;
+      cita.prestaciones = serviceFind.id;
+      console.log(cita)
+      await this.agendarCita(servicio, agent, cita)
+      // this.cita = cita
     }
 
-    this.agendarCita(servicio,this.cita)
-    console.log(this.diasDisponibles,'dias disponibleeees');
-    console.log(agent.parameters, 'parametros agendar');
+    // console.log('cita',this.cita)
+
+
+    // console.log(this.diasDisponibles,'dias disponibleeees');
+    // console.log(agent.parameters, 'parametros agendar');
    // agent.add(`En que servicios deseas . ${agent.parameters.servicio}`,)
     //agent.add(
     //  `Desea aceptar la cita, para cotizar un proyecto para el dia 15/09/2022 a las 15:00:00 . ${agent.parameters.servicio}`,
@@ -175,11 +196,14 @@ export class AgenteService {
     }));
 
 
-    this.horariosDisponibles = horarios.map((item, index) => `${index + 1}.- ${item.dia.split('-').reverse().join('-')} en el horario de ${item.horaInicio} a ${item.horaFin}`)
+    this.horariosDisponibles = horarios
+      //.map((item, index) => `${index + 1}.- ${item.dia.split('-').reverse().join('-')} en el horario de ${item.horaInicio} a ${item.horaFin}`)
     console.log(this.horariosDisponibles)
   }
 
-  async agendarCita(nombreServicio: string, cita?: CitaCrearDto) {
+  async agendarCita(nombreServicio: string, agent: any,  cita?: CitaCrearDto,) {
+
+
     const query = {
       where: {
         nombreServicio,
@@ -194,123 +218,171 @@ export class AgenteService {
         return;
       }
       const servicioAgendar = servicios[0];
-
-      //! busco el dia de la cita
-      const existeDia = servicioAgendar.horarioDias.find((day) => {
-        return day.dia === cita.dia;
-      });
-
-      //! valido si exite horario dia
-      if (!existeDia) {
-        console.log('no hay dia');
-        return;
-      }
-
-      //! valido el dia esta en el rango del servicio
-      const range = isBefore(
-        new Date(existeDia.horariosHora[0].desde),
-        new Date(cita.horaInicio),
+      const tiempoServicio = +format(
+        new Date(servicioAgendar.tiempoAproximado),
+        'mm',
       );
 
-      //! furea de rango
-      if (!range) {
-        console.log('fuera de rango');
-        return;
-      }
+      const fechaFinServicio = addMinutes(
+        new Date(cita.horaInicio),
+        tiempoServicio,
+      );
 
-      //! dentro del rango
-      if (range) {
-        //! exiten citas
-        if (servicioAgendar.citas.length) {
-          console.log(servicioAgendar.citas);
-          const sameOrRange = servicioAgendar.citas.map((value) => {
-            //! misma dia
-            const same = isSameHour(
-              new Date(value.horaInicio),
-              new Date(cita.horaInicio),
-            );
+      const preCita = {
+        dateTimeStart: DateUtil.formatCalenda(cita.horaInicio),
+        dateTimeEnd: DateUtil.formatCalenda(fechaFinServicio),
+        dateInit: cita.horaInicio,
+        dateEnd: fechaFinServicio,
+        diaInicio: format(new Date(cita.horaInicio), 'yyyy-MM-dd'),
+        horaInicio: format(new Date(cita.horaInicio), 'HH:mm'),
+        diaFin: format(new Date(fechaFinServicio), 'yyyy-MM-dd'),
+        horaFin: format(new Date(fechaFinServicio), 'HH:mm'),
+      };
+      console.log(preCita);
 
-            //! rango de una fecha para nueva cita
-            const range =
-              isAfter(new Date(value.horaInicio), new Date(cita.horaInicio)) &&
-              isBefore(new Date(cita.horaInicio), new Date(value.horaFin));
-            return {
-              same,
-              range,
-            };
-          });
+      this._calendarService
+        .createEvent({
+          summary: 'Cita - servicio',
+          location: 'Quito,Ecuador',
+          description: 'Analisis de requerimientos',
+          start: {
+            dateTime: DateUtil.formatCalenda(preCita.dateTimeStart),
+            timeZone: 'America/Guayaquil',
+          },
+          end: {
+            dateTime: DateUtil.formatCalenda(preCita.dateTimeEnd),
+            timeZone: 'America/Guayaquil',
+          },
+          reminders: {
+            useDefault: false,
+            overrides: [
+              { method: 'email', minutes: 24 * 60 },
+              { method: 'popup', minutes: 10 },
+            ],
+          },
+        })
+        .then(() => agent.add('Cita exitosa'))
+        .catch(console.log);
 
-          if (sameOrRange[0].same) {
-            console.log('same');
-            return;
-          }
-
-          if (sameOrRange[0].range) {
-            console.log('dentro range');
-            return;
-          }
-        }
-
-        //! tiempo del servicio
-        const tiempoServicio = +format(
-          new Date(servicioAgendar.tiempoAproximado),
-          'mm',
-        );
-        //! a la fecha inicio se le agrea el tiempo del servicio
-        const fechaFinServicio = addMinutes(
-          new Date(cita.horaInicio),
-          tiempoServicio,
-        );
-
-        //! validar rango del servicio con la fecha incio
-        const rangoServicio = isAfter(
-          new Date(existeDia.horariosHora[0].hasta),
-          new Date(fechaFinServicio),
-        );
-
-        //! fuera rango del servicio con la fecha incio
-        if (!rangoServicio) {
-          console.log('furea de rango servicio');
-          return;
-        }
-
-        //! datos para monstra usuario y poder crear agendar y cita
-        const preCita = {
-          dateTimeStart: DateUtil.formatCalenda(cita.horaInicio),
-          dateTimeEnd: DateUtil.formatCalenda(fechaFinServicio),
-          dateInit: cita.horaInicio,
-          dateEnd: fechaFinServicio,
-          diaInicio: format(new Date(cita.horaInicio), 'yyyy-MM-dd'),
-          horaInicio: format(new Date(cita.horaInicio), 'HH:mm'),
-          diaFin: format(new Date(fechaFinServicio), 'yyyy-MM-dd'),
-          horaFin: format(new Date(fechaFinServicio), 'HH:mm'),
-        };
-        console.log(preCita);
-
-        this._calendarService
-          .createEvent({
-            summary: 'Cita - servicio',
-            location: 'Quito,Ecuador',
-            description: 'Analisis de requerimientos',
-            start: {
-              dateTime: DateUtil.formatCalenda(preCita.dateTimeStart),
-              timeZone: 'America/Guayaquil',
-            },
-            end: {
-              dateTime: DateUtil.formatCalenda(preCita.dateTimeEnd),
-              timeZone: 'America/Guayaquil',
-            },
-            reminders: {
-              useDefault: false,
-              overrides: [
-                { method: 'email', minutes: 24 * 60 },
-                { method: 'popup', minutes: 10 },
-              ],
-            },
-          })
-          .then(console.log)
-          .catch(console.log);
-      }
+      //! busco el dia de la cita
+      // const existeDia = servicioAgendar.horarioDias.find((day) => {
+      //   return day.dia === cita.dia;
+      // });
+      //
+      // //! valido si exite horario dia
+      // if (!existeDia) {
+      //   console.log('no hay dia');
+      //   return;
+      // }
+      //
+      // console.log(existeDia.horariosHora[0].desde, cita.horaInicio)
+      // console.log(existeDia.horariosHora[0].desde, new Date(cita.horaInicio))
+      //
+      // //! valido el dia esta en el rango del servicio
+      // const range = isBefore(
+      //   new Date(existeDia.horariosHora[0].desde),
+      //   new Date(cita.horaInicio),
+      // );
+      //
+      // //! furea de rango
+      // if (!range) {
+      //   console.log('fuera de rango');
+      //   return;
+      // }
+      //
+      // //! dentro del rango
+      // if (range) {
+      //   //! exiten citas
+      //   if (servicioAgendar.citas.length) {
+      //     console.log(servicioAgendar.citas);
+      //     const sameOrRange = servicioAgendar.citas.map((value) => {
+      //       //! misma dia
+      //       const same = isSameHour(
+      //         new Date(value.horaInicio),
+      //         new Date(cita.horaInicio),
+      //       );
+      //
+      //       //! rango de una fecha para nueva cita
+      //       const range =
+      //         isAfter(new Date(value.horaInicio), new Date(cita.horaInicio)) &&
+      //         isBefore(new Date(cita.horaInicio), new Date(value.horaFin));
+      //       return {
+      //         same,
+      //         range,
+      //       };
+      //     });
+      //
+      //     if (sameOrRange[0].same) {
+      //       console.log('same');
+      //       return;
+      //     }
+      //
+      //     if (sameOrRange[0].range) {
+      //       console.log('dentro range');
+      //       return;
+      //     }
+      //   }
+      //
+      //   //! tiempo del servicio
+      //   const tiempoServicio = +format(
+      //     new Date(servicioAgendar.tiempoAproximado),
+      //     'mm',
+      //   );
+      //   //! a la fecha inicio se le agrea el tiempo del servicio
+      //   const fechaFinServicio = addMinutes(
+      //     new Date(cita.horaInicio),
+      //     tiempoServicio,
+      //   );
+      //
+      //   // //! validar rango del servicio con la fecha incio
+      //   // const rangoServicio = isAfter(
+      //   //   new Date(existeDia.horariosHora[0].hasta),
+      //   //   new Date(fechaFinServicio),
+      //   // );
+      //   //
+      //   // //! fuera rango del servicio con la fecha incio
+      //   // if (!rangoServicio) {
+      //   //   console.log('furea de rango servicio');
+      //   //   return;
+      //   // }
+      //
+      //   //! datos para monstra usuario y poder crear agendar y cita
+      //   const preCita = {
+      //     dateTimeStart: DateUtil.formatCalenda(cita.horaInicio),
+      //     dateTimeEnd: DateUtil.formatCalenda(fechaFinServicio),
+      //     dateInit: cita.horaInicio,
+      //     dateEnd: fechaFinServicio,
+      //     diaInicio: format(new Date(cita.horaInicio), 'yyyy-MM-dd'),
+      //     horaInicio: format(new Date(cita.horaInicio), 'HH:mm'),
+      //     diaFin: format(new Date(fechaFinServicio), 'yyyy-MM-dd'),
+      //     horaFin: format(new Date(fechaFinServicio), 'HH:mm'),
+      //   };
+      //   console.log(preCita);
+      //
+      //   this._calendarService
+      //     .createEvent({
+      //       summary: 'Cita - servicio',
+      //       location: 'Quito,Ecuador',
+      //       description: 'Analisis de requerimientos',
+      //       start: {
+      //         dateTime: DateUtil.formatCalenda(preCita.dateTimeStart),
+      //         timeZone: 'America/Guayaquil',
+      //       },
+      //       end: {
+      //         dateTime: DateUtil.formatCalenda(preCita.dateTimeEnd),
+      //         timeZone: 'America/Guayaquil',
+      //       },
+      //       reminders: {
+      //         useDefault: false,
+      //         overrides: [
+      //           { method: 'email', minutes: 24 * 60 },
+      //           { method: 'popup', minutes: 10 },
+      //         ],
+      //       },
+      //     })
+      //     .then(console.log)
+      //     .catch(console.log);
+      // }
     });
   }
 }

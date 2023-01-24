@@ -128,7 +128,8 @@ export class AgenteService {
       this.serviciosAmostrar.forEach((item) => {
         agent.add(new Suggestion(`${item}`));
       });
-    }
+    } else {}
+
     const servicio = agent.parameters.servicio;
     console.log(servicio);
     // this.serviciosEmpresa.find(item => item.mo)
@@ -173,6 +174,8 @@ export class AgenteService {
       cita.prestaciones = serviceFind.id;
       console.log(cita);
       await this.agendarCita(servicio, agent, cita);
+      agent.add('Cita registrada con exito')
+      // agent.add().clear()
       this.cita = cita
     }
 

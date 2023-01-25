@@ -7,7 +7,7 @@ import { CitaCrearDto } from '../cita/dto/cita.crear.dto';
 import { EmpresaService } from '../empresa/empresa.service';
 import { PrestacionesService } from '../prestaciones/prestaciones.service';
 const accountSid = 'ACcb8a178aa4a7cd9b79782d9e9de4bb1b';
-const authToken = '9986be4dcac62d35bf3f353ee7a38daf';
+const authToken = 'f7be58793f991e58a429c3a053d16fd6';
 
 @Injectable()
 export class WhatsappService {

@@ -7,7 +7,7 @@ import { CitaCrearDto } from '../cita/dto/cita.crear.dto';
 import { EmpresaService } from '../empresa/empresa.service';
 import { PrestacionesService } from '../prestaciones/prestaciones.service';
 const accountSid = 'ACcb8a178aa4a7cd9b79782d9e9de4bb1b';
-const authToken = '12474cea138966f47d3405e918baa557';
+const authToken = 'dc7ddce128b19e91e450bc21a6558d29';
 
 @Injectable()
 export class WhatsappService {
@@ -106,7 +106,7 @@ export class WhatsappService {
       this.sendNotification(msg, num);
       const horario = await this.horariosServicio(find.nombreServicio);
       console.log(horario);
-      horario.forEach((item, index) => {
+      for (const item of horario) {
         this.sendNotification(
           `${find.id}.- ${item.dia
             .split('-')
@@ -116,7 +116,18 @@ export class WhatsappService {
           }\n`,
           num,
         );
-      });
+      }
+      // horario.forEach((item, index) => {
+      //   this.sendNotification(
+      //     `${find.id}.- ${item.dia
+      //       .split('-')
+      //       .reverse()
+      //       .join('-')} en el horario de ${item.horaInicio} a ${
+      //       item.horaFin
+      //     }\n`,
+      //     num,
+      //   );
+      // });
 
       // agent.add(`Tenemos los siguientes dias disponibles:`);
     }

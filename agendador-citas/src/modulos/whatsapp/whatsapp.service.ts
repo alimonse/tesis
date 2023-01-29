@@ -7,7 +7,7 @@ import { CitaCrearDto } from '../cita/dto/cita.crear.dto';
 import { EmpresaService } from '../empresa/empresa.service';
 import { PrestacionesService } from '../prestaciones/prestaciones.service';
 const accountSid = 'ACcb8a178aa4a7cd9b79782d9e9de4bb1b';
-const authToken = 'f7be58793f991e58a429c3a053d16fd6';
+const authToken = '12474cea138966f47d3405e918baa557';
 
 @Injectable()
 export class WhatsappService {
@@ -105,6 +105,7 @@ export class WhatsappService {
       const msg = `Nota: si no se visualizan los opciones porfavor escribelas! \n\n El servicio seleccionado es ${find.nombreServicio} \n\n Tenemos los siguientes dias disponibles: \n\n`;
       this.sendNotification(msg, num);
       const horario = await this.horariosServicio(find.nombreServicio);
+      console.log(horario);
       horario.forEach((item, index) => {
         this.sendNotification(
           `${find.id}.- ${item.dia
@@ -160,14 +161,23 @@ export class WhatsappService {
       return;
     }
     const horarios = value[0][0].horarioDias.map((horaioDia) => ({
-      aproximado: format(new Date(value[0][0].tiempoAproximado), 'mm'),
-      espera: format(new Date(value[0][0].tiempoEspera), 'mm'),
+      aproximado: value[0][0].tiempoAproximado,
+      espera: value[0][0].tiempoEspera,
       dia: horaioDia.dia,
-      horaInicio: format(new Date(horaioDia.horariosHora[0].desde), 'HH:mm'),
-      horaFin: format(new Date(horaioDia.horariosHora[0].hasta), 'HH:mm'),
+      horaInicio: horaioDia.horariosHora[0].desde,
+      horaFin: horaioDia.horariosHora[0].hasta,
       desde: horaioDia.horariosHora[0].desde,
       hasta: horaioDia.horariosHora[0].hasta,
     }));
+    // const horarios = value[0][0].horarioDias.map((horaioDia) => ({
+    //   aproximado: format(new Date(value[0][0].tiempoAproximado), 'mm'),
+    //   espera: format(new Date(value[0][0].tiempoEspera), 'mm'),
+    //   dia: horaioDia.dia,
+    //   horaInicio: format(new Date(horaioDia.horariosHora[0].desde), 'HH:mm'),
+    //   horaFin: format(new Date(horaioDia.horariosHora[0].hasta), 'HH:mm'),
+    //   desde: horaioDia.horariosHora[0].desde,
+    //   hasta: horaioDia.horariosHora[0].hasta,
+    // }));
 
     return horarios;
   }
@@ -190,26 +200,26 @@ export class WhatsappService {
         console.log('sin data');
         return;
       }
-      const servicioAgendar = servicios[0];
-      const tiempoServicio = +format(
-        new Date(servicioAgendar.tiempoAproximado),
-        'mm',
-      );
-
-      const fechaFinServicio = addMinutes(
-        new Date(cita.horaInicio),
-        tiempoServicio,
-      );
+      // const servicioAgendar = servicios[0];
+      // const tiempoServicio = +format(
+      //   new Date(servicioAgendar.tiempoAproximado),
+      //   'mm',
+      // );
+      //
+      // const fechaFinServicio = addMinutes(
+      //   new Date(cita.horaInicio),
+      //   tiempoServicio,
+      // );
 
       const preCita = {
         dateTimeStart: DateUtil.formatCalenda(cita.horaInicio),
-        dateTimeEnd: DateUtil.formatCalenda(fechaFinServicio),
+        dateTimeEnd: DateUtil.formatCalenda(cita.horaFin),
         dateInit: cita.horaInicio,
-        dateEnd: fechaFinServicio,
+        dateEnd: cita.horaFin,
         diaInicio: format(new Date(cita.horaInicio), 'yyyy-MM-dd'),
         horaInicio: format(new Date(cita.horaInicio), 'HH:mm'),
-        diaFin: format(new Date(fechaFinServicio), 'yyyy-MM-dd'),
-        horaFin: format(new Date(fechaFinServicio), 'HH:mm'),
+        diaFin: format(new Date(cita.horaFin), 'yyyy-MM-dd'),
+        horaFin: format(new Date(cita.horaFin), 'HH:mm'),
       };
       console.log(preCita);
 

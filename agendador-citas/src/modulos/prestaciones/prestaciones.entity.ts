@@ -21,15 +21,15 @@ export class PrestacionesEntity extends EntidadPrincipal {
 
   @Column({
     name: 'tiempo_aproximado',
-    type: 'datetime',
+    type: 'int',
   })
-  tiempoAproximado: string;
+  tiempoAproximado: number;
 
   @Column({
     name: 'tiempo_espera',
-    type: 'datetime',
+    type: 'int',
   })
-  tiempoEspera: string;
+  tiempoEspera: number;
 
   @Column({
     name: 'habilitado',

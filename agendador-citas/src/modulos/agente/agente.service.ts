@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { WebhookClient, Card, Suggestion, Text } from 'dialogflow-fulfillment';
-import { format, isSameHour, isBefore, isAfter, addMinutes } from 'date-fns';
-
-import { EmpresaService } from '../empresa/empresa.service';
-import { PrestacionesService } from '../prestaciones/prestaciones.service';
+import { format } from 'date-fns';
+import { Card, WebhookClient } from 'dialogflow-fulfillment';
 import { CalendarService } from '../../calendar.service';
 import { DateUtil } from '../../utils/date.util';
 import { CitaCrearDto } from '../cita/dto/cita.crear.dto';
+
+import { EmpresaService } from '../empresa/empresa.service';
+import { PrestacionesService } from '../prestaciones/prestaciones.service';
 
 @Injectable()
 export class AgenteService {
@@ -19,6 +19,8 @@ export class AgenteService {
   serviciosAmostrar;
   diasDisponibles;
   cita;
+  reponseQuery;
+  isCreate = false;
 
   constructor(
     private readonly _empresaService: EmpresaService,
@@ -26,20 +28,7 @@ export class AgenteService {
     private readonly _calendarService: CalendarService,
   ) {
     this.consultarDataEmpresa().then();
-    this.consultarServicios().then();
-    // this.horariosServicio('nombreServicio');
-    // const cita = new CitaCrearDto();
-    // cita.dia = '2023-01-23';
-    // cita.horaFin = '2023-01-23T17:15:00.000Z';
-    // cita.horaInicio = '2023-01-23T16:15:00.000Z';
-    // // cita.caledarId = 'calendariD';
-    // cita.descripcion = 'NUEVA';
-    // cita.habilitado = 1;
-    // cita.usuario = 1;
-    // cita.prestaciones = 1;
-    // this.cita = cita
-    // this.agendarCita('Analisis de requerimientos', cita);
-    // this.saberEventosCalendario();
+    // this.consultarServicios().then();
   }
 
   async consultarDataEmpresa() {
@@ -104,7 +93,8 @@ export class AgenteService {
     );
   };
 
-  servicios = (agent) => {
+  servicios = async (agent) => {
+    await this.consultarServicios();
     // const msg = `Tenemos los siguientes servicios:\n${this.serviciosAmostrar}
     //   \n Si deseas agendar una cita, da clic en "Agendar cita"`;
     agent.add('Tenemos los siguientes servicios');
@@ -114,15 +104,15 @@ export class AgenteService {
     });
     // agent.add(`${this.serviciosAmostrar}`);
     agent.add('Si deseas agendar una cita, escriba o de clic "Agendar cita"');
-   // agent.add(new Suggestion('Agendar cita'));
   };
 
-  agendar =  async (agent) => {
+  agendar = async (agent) => {
+    console.log(this.isCreate);
+    console.log(agent.parameters);
     await this.consultarServicios();
-    console.log(agent.parameters.servicio)
     agent.add(`Nota: si no se visualizan los opciones porfavor escribelas!`);
     agent.add(`En que servicios deseas:`);
-    if(this.serviciosAmostrar.length > 0){
+    if (this.serviciosAmostrar.length > 0) {
       this.serviciosAmostrar.forEach((item) => {
         agent.add(item);
       });
@@ -146,18 +136,36 @@ export class AgenteService {
       const serviceFind = this.serviciosEmpresa[0].find(
         (item) => item.nombreServicio === servicio,
       );
-      const cita = new CitaCrearDto();
-      cita.dia = agent.parameters.fecha.split('T')[0];
-      cita.horaFin = agent.parameters.fin || new Date(Date.now()).toISOString();
-      cita.horaInicio = agent.parameters.inicio;
-      // cita.caledarId = 'calendariD';
-      cita.descripcion = 'cita servicio: ' + servicio;
-      cita.habilitado = 1;
-      cita.usuario = 1;
-      cita.prestaciones = serviceFind.id;
-      console.log(cita);
-      await this.agendarCita(servicio, agent, cita);
-      agent.add('Cita registrada con exito')
+      const ishour = this.reponseQuery.includes('en el horario de');
+      if (
+        agent.parameters.fin &&
+        agent.parameters.fecha &&
+        agent.parameters.inicio &&
+        ishour
+      ) {
+        console.log('reponseQuery', this.reponseQuery);
+        const inicio = this.reponseQuery.split(' ')[6];
+        const fin = this.reponseQuery.split(' ')[8];
+        const cita = new CitaCrearDto();
+        cita.dia = agent.parameters.fecha.split('T')[0];
+        cita.horaFin = new Date(
+          new Date(
+            new Date(agent.parameters.fecha).setHours(+fin.split(':')[0]),
+          ).setMinutes(+fin.split(':')[1]),
+        ).toISOString();
+        cita.horaInicio = new Date(
+          new Date(
+            new Date(agent.parameters.fecha).setHours(inicio.split(':')[0]),
+          ).setMinutes(inicio.split(':')[1]),
+        ).toISOString();
+        // cita.caledarId = 'calendariD';
+        cita.descripcion = 'cita servicio: ' + servicio;
+        cita.habilitado = 1;
+        cita.usuario = 1;
+        cita.prestaciones = serviceFind.id;
+        await this.agendarCita(servicio, cita);
+        agent.add('Cita registrada con exito');
+      }
       // agent.add().clear()
       // this.cita = cita
     }
@@ -172,16 +180,12 @@ export class AgenteService {
     // );
   };
 
-  dia = (agente) => {
-    `Tenemos los siguientes dias disponibles 2022-09-03 en el horario de 4:15 a 5:15
-`;
+  fin = (agente) => {
+    agente.add('Su servicio a sido agendado correctamente');
   };
 
-  fin = (agente) => {
-    agente.add('Su servicio a sido agendado correctamente')
-  }
-
   general(request, response) {
+    this.reponseQuery = response?.req.body?.queryResult?.queryText;
     const agent = new WebhookClient({ request, response });
     const intentMap = new Map();
     intentMap.set('welcome', this.welcome);
@@ -189,7 +193,7 @@ export class AgenteService {
     intentMap.set('servicios', this.servicios);
     intentMap.set('agendar', this.agendar);
     intentMap.set('ubicacion', this.ubicacion);
-    intentMap.set('fin',this.fin);
+    intentMap.set('fin', this.fin);
     agent.handleRequest(intentMap);
   }
 
@@ -208,20 +212,18 @@ export class AgenteService {
       return;
     }
     const horarios = value[0][0].horarioDias.map((horaioDia) => ({
-      aproximado: format(new Date(value[0][0].tiempoAproximado), 'mm'),
-      espera: format(new Date(value[0][0].tiempoEspera), 'mm'),
+      aproximado: value[0][0].tiempoAproximado,
+      espera: value[0][0].tiempoEspera,
       dia: horaioDia.dia,
-      horaInicio: format(new Date(horaioDia.horariosHora[0].desde), 'HH:mm'),
-      horaFin: format(new Date(horaioDia.horariosHora[0].hasta), 'HH:mm'),
+      horaInicio: horaioDia.horariosHora[0].desde,
+      horaFin: horaioDia.horariosHora[0].hasta,
       desde: horaioDia.horariosHora[0].desde,
       hasta: horaioDia.horariosHora[0].hasta,
     }));
-
     this.horariosDisponibles = horarios;
-    console.log(this.horariosDisponibles);
   }
 
-  async agendarCita(nombreServicio: string, agent: any, cita?: CitaCrearDto) {
+  async agendarCita(nombreServicio: string, cita?: CitaCrearDto) {
     const query = {
       where: {
         nombreServicio,
@@ -235,30 +237,30 @@ export class AgenteService {
         console.log('sin data');
         return;
       }
-      const servicioAgendar = servicios[0];
-      const tiempoServicio = +format(
-        new Date(servicioAgendar.tiempoAproximado),
-        'mm',
-      );
-
-      const fechaFinServicio = addMinutes(
-        new Date(cita.horaInicio),
-        tiempoServicio,
-      );
+      // const servicioAgendar = servicios[0];
+      // const tiempoServicio = +format(
+      //   new Date(servicioAgendar.tiempoAproximado),
+      //   'mm',
+      // );
+      //
+      // const fechaFinServicio = addMinutes(
+      //   new Date(cita.horaInicio),
+      //   tiempoServicio,
+      // );
 
       const preCita = {
         dateTimeStart: DateUtil.formatCalenda(cita.horaInicio),
-        dateTimeEnd: DateUtil.formatCalenda(fechaFinServicio),
+        dateTimeEnd: DateUtil.formatCalenda(cita.horaFin),
         dateInit: cita.horaInicio,
-        dateEnd: fechaFinServicio,
+        dateEnd: cita.horaFin,
         diaInicio: format(new Date(cita.horaInicio), 'yyyy-MM-dd'),
         horaInicio: format(new Date(cita.horaInicio), 'HH:mm'),
-        diaFin: format(new Date(fechaFinServicio), 'yyyy-MM-dd'),
-        horaFin: format(new Date(fechaFinServicio), 'HH:mm'),
+        diaFin: format(new Date(cita.horaFin), 'yyyy-MM-dd'),
+        horaFin: format(new Date(cita.horaFin), 'HH:mm'),
       };
       console.log(preCita);
 
-      this._calendarService
+      return this._calendarService
         .createEvent({
           summary: 'Cita - servicio',
           location: 'Quito,Ecuador',
@@ -279,7 +281,7 @@ export class AgenteService {
             ],
           },
         })
-        .then(() => agent.add('Cita exitosa'))
+        .then(() => (this.isCreate = true))
         .catch(console.log);
 
       //! busco el dia de la cita

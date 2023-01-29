@@ -6,13 +6,13 @@ import { HorarioDiaEntity } from '../horario-dia/horario-dia.entity';
 export class HorarioHoraEntity extends EntidadPrincipal {
   @Column({
     name: 'desde',
-    type: 'datetime',
+    type: 'varchar',
   })
   desde: string;
 
   @Column({
     name: 'hasta',
-    type: 'datetime',
+    type: 'varchar',
   })
   hasta: string;
 

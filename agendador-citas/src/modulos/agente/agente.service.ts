@@ -264,7 +264,7 @@ export class AgenteService {
         .createEvent({
           summary: 'Cita - servicio',
           location: 'Quito,Ecuador',
-          description: 'Analisis de requerimientos',
+          description: nombreServicio,
           start: {
             dateTime: DateUtil.formatCalenda(preCita.dateTimeStart),
             timeZone: 'America/Guayaquil',

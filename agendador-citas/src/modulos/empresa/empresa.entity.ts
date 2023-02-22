@@ -19,8 +19,8 @@ export class EmpresaEntity extends EntidadPrincipal {
   @Column({
     name: 'informacion',
     type: 'varchar',
-    length: 250,
-    // length: 32765
+    // length: 250,
+    length: 32765
   })
   informacion: string;
 
